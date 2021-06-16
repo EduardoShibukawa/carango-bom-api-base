@@ -1,4 +1,4 @@
-package br.com.caelum.carangobom.marca;
+package br.com.caelum.carangobom.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-public class Marca {
+public class Brand {
 
     @Id @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -18,15 +18,15 @@ public class Marca {
     @Size(min = 2, message = "Deve ter {min} ou mais caracteres.")
     private String nome;
 
-    public Marca() {
+    public Brand() {
 
     }
 
-    public Marca(String nome) {
+    public Brand(String nome) {
         this(null, nome);
     }
 
-    public Marca(Long id, String nome) {
+    public Brand(Long id, String nome) {
         this.id = id;
         this.nome = nome;
     }
