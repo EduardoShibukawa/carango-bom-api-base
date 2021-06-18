@@ -1,9 +1,16 @@
 package br.com.caelum.carangobom.marca;
 
-import br.com.caelum.carangobom.controllers.BrandController;
-import br.com.caelum.carangobom.domain.Brand;
-import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
-import br.com.caelum.carangobom.services.BrandService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
+
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -11,131 +18,122 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
+import br.com.caelum.carangobom.controllers.BrandController;
+import br.com.caelum.carangobom.domain.Brand;
+import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
+import br.com.caelum.carangobom.services.BrandService;
 
 class BrandControllerTest {
 
-    private BrandController brandController;
-    private UriComponentsBuilder uriBuilder;
+	private BrandController brandController;
+	private UriComponentsBuilder uriBuilder;
 
-    @Mock
-    private BrandService brandService;
+	@Mock
+	private BrandService brandService;
 
-    @BeforeEach
-    public void configuraMock() {
-        openMocks(this);
+	@BeforeEach
+	public void configuraMock() {
+		openMocks(this);
 
-        brandController = new BrandController(brandService);
-        uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
-    }
+		brandController = new BrandController(brandService);
+		uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080");
+	}
 
-    @Test
-    void deveRetornarListaQuandoHouverResultados() {
-        List<Brand> marcas = List.of(
-            new Brand(1L, "Audi"),
-            new Brand(2L, "BMW"),
-            new Brand(3L, "Fiat")
-        );
+	@Test
+	void deveRetornarListaQuandoHouverResultados() {
+		List<Brand> marcas = List.of(new Brand(1L, "Audi"), new Brand(2L, "BMW"), new Brand(3L, "Fiat"));
 
-        when(brandService.findAllByOrderByNome())
-            .thenReturn(marcas);
+		when(brandService.findAllByOrderByNome()).thenReturn(marcas);
 
-        List<Brand> resultado = brandController.getAll();
-        assertEquals(marcas, resultado);
-    }
+		List<Brand> resultado = brandController.getAll();
+		assertEquals(marcas, resultado);
+	}
 
-    @Test
-    void deveRetornarMarcaPeloId() {
-        Brand audi = new Brand(1L, "Audi");
+	@Test
+	void deveRetornarMarcaPeloId() {
+		Brand audi = new Brand(1L, "Audi");
 
-        when(brandService.findById(1L))
-            .thenReturn(Optional.of(audi));
+		when(brandService.findById(1L)).thenReturn(audi);
 
-        ResponseEntity<Brand> resposta = brandController.findById(1L);
-        assertEquals(audi, resposta.getBody());
-        assertEquals(HttpStatus.OK, resposta.getStatusCode());
-    }
+		ResponseEntity<Brand> resposta = brandController.findById(1L);
 
-    @Test
-    void deveRetornarNotFoundQuandoRecuperarMarcaComIdInexistente() {
-        when(brandService.findById(anyLong()))
-                .thenReturn(Optional.empty());
+		assertEquals(audi, resposta.getBody());
+		assertEquals(HttpStatus.OK, resposta.getStatusCode());
+	}
 
-        ResponseEntity<Brand> resposta = brandController.findById(1L);
-        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
-    }
+	@Test
+	void deveRetornarNotFoundQuandoRecuperarMarcaComIdInexistente() {
+		doThrow(BrandNotFoundException.class).when(brandService).findById(anyLong());
 
-    @Test
-    void deveResponderCreatedELocationQuandoCadastrarMarca() {
-        Brand nova = new Brand("Ferrari");
+		ResponseEntity<Brand> resposta = brandController.findById(1L);
+		assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+	}
 
-        when(brandService.save(nova))
-            .then(invocation -> {
-                Brand brandSalva = invocation.getArgument(0, Brand.class);
-                brandSalva.setId(1L);
+	@Test
+	void deveResponderCreatedELocationQuandoCadastrarMarca() {
+		Brand nova = new Brand("Ferrari");
 
-                return brandSalva;
-            });
+		when(brandService.save(nova)).then(invocation -> {
+			Brand brandSalva = invocation.getArgument(0, Brand.class);
+			brandSalva.setId(1L);
 
-        ResponseEntity<Brand> resposta = brandController.save(nova, uriBuilder);
-        assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
-        assertEquals("http://localhost:8080/brands/1", resposta.getHeaders().getLocation().toString());
-    }
+			return brandSalva;
+		});
 
-    @Test
-    void deveAlterarNomeQuandoMarcaExistir() {
-        Brand audi = new Brand(1L, "Audi");
+		ResponseEntity<Brand> resposta = brandController.save(nova, uriBuilder);
+		assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
+		assertEquals("http://localhost:8080/brands/1", resposta.getHeaders().getLocation().toString());
+	}
 
-        when(brandService.findById(1L))
-            .thenReturn(Optional.of(audi));
+	@Test
+	void shouldUpdateNameWhenBrandExists() {
+		Brand brandRequest = new Brand(1L, "NOVA Audi");
 
-        ResponseEntity<Brand> resposta = brandController.update(1L, new Brand(1L, "NOVA Audi"));
-        assertEquals(HttpStatus.OK, resposta.getStatusCode());
+		when(brandService.update(1L, brandRequest))
+			.thenReturn(brandRequest);
 
-        Brand brandAlterada = resposta.getBody();
-        assertEquals("NOVA Audi", brandAlterada.getNome());
-    }
+		ResponseEntity<Brand> response = brandController.update(1L, brandRequest);
+		Brand brandResponse = response.getBody();
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());		
+		assertEquals("NOVA Audi", brandResponse.getNome());
+	}
 
-    @Test
-    void naoDeveAlterarMarcaInexistente() {
-        when(brandService.findById(anyLong()))
-                .thenReturn(Optional.empty());
+	@Test
+	void shouldReturnNotFoundIfBrandNotExits() {
+		doThrow(BrandNotFoundException.class)
+			.when(brandService)
+			.update(anyLong(), any());
 
-        ResponseEntity<Brand> resposta = brandController.update(1L, new Brand(1L, "NOVA Audi"));
-        assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
-    }
+		ResponseEntity<Brand> resposta = brandController.update(1L, new Brand(1L, "NOVA Audi"));
 
-    @Test
-    void shoudlDeleteBrand() {
-        Brand brand = new Brand(1l, "Audi");
+		assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+	}
 
-        when(brandService.findById(1L))
-            .thenReturn(Optional.of(brand));
+	@Test
+	void shoudlDeleteBrand() {
+		Brand brand = new Brand(1l, "Audi");
 
-        ResponseEntity<Brand> response = brandController.delete(1L);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        
-        verify(brandService).delete(1L);
-    }
+		when(brandService.findById(1L))
+			.thenReturn(brand);
 
-    @Test
-    void shouldReturnNotFoundIfNotExists() {
-    	doThrow(BrandNotFoundException.class)
-    		.when(brandService)
-    		.delete(anyLong());
-    	
-        ResponseEntity<Brand> response = brandController.delete(1L);
-        
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+		ResponseEntity<Brand> response = brandController.delete(1L);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        verify(brandService, times(1)).delete(any());
-    }
+		verify(brandService).delete(1L);
+	}
+
+	@Test
+	void shouldReturnNotFoundIfNotExists() {
+		doThrow(BrandNotFoundException.class)
+			.when(brandService)
+			.delete(anyLong());
+
+		ResponseEntity<Brand> response = brandController.delete(1L);
+
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+		verify(brandService, times(1)).delete(any());
+	}
 
 }

@@ -20,8 +20,14 @@ public class BrandService {
 		this.brandRepository = brandRepository;
 	}
 
-	public Optional<Brand> findById(Long id) {
-		return brandRepository.findById(id);
+	public Brand findById(Long id) {
+		Optional<Brand> optional = brandRepository.findById(id);
+
+		if (optional.isEmpty()) {
+			throw new BrandNotFoundException();
+		}
+
+		return optional.get();
 	}
 
 	public Brand save(Brand brand) {
@@ -29,16 +35,18 @@ public class BrandService {
 	}
 
 	public void delete(Long id) {
-		Optional<Brand> optional = findById(id);
-
-		if (optional.isEmpty()) {
-			throw new BrandNotFoundException();
-		}
-
-		brandRepository.delete(optional.get());
+		brandRepository.delete(findById(id));
 	}
 
 	public List<Brand> findAllByOrderByNome() {
 		return brandRepository.findAllByOrderByNome();
+	}
+
+	public Brand update(Long id, Brand brandRequest) {
+		Brand brand = findById(id);
+
+		brand.setNome(brandRequest.getNome());
+
+		return brandRepository.save(brand);
 	}
 }
