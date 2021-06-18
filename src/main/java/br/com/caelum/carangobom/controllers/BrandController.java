@@ -1,6 +1,7 @@
 package br.com.caelum.carangobom.controllers;
 
 import br.com.caelum.carangobom.domain.Brand;
+import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
 import br.com.caelum.carangobom.services.BrandService;
 import br.com.caelum.carangobom.validacao.ErroDeParametroOutputDto;
 import br.com.caelum.carangobom.validacao.ListaDeErrosOutputDto;
@@ -75,14 +76,14 @@ public class BrandController {
     @ResponseBody
     @Transactional
     public ResponseEntity<Brand> delete(@PathVariable Long id) {
-        Optional<Brand> optional = brandService.findById(id);
-        if (optional.isPresent()) {
-            Brand brand = optional.get();
-            brandService.delete(brand);
-            return ResponseEntity.ok(brand);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    	try {
+            brandService.delete(id);
+            
+            return ResponseEntity.ok().build();
+    	}
+    	catch (BrandNotFoundException e) {
+    		return ResponseEntity.notFound().build();
+		}
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
