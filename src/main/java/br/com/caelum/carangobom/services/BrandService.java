@@ -38,14 +38,14 @@ public class BrandService {
 		brandRepository.delete(findById(id));
 	}
 
-	public List<Brand> findAllByOrderByNome() {
-		return brandRepository.findAllByOrderByNome();
+	public List<Brand> findAllByOrderByName() {
+		return brandRepository.findAllByOrderByName();
 	}
 
 	public Brand update(Long id, Brand brandRequest) {
 		Brand brand = findById(id);
 
-		brand.setNome(brandRequest.getNome());
+		brand.setName(brandRequest.getName());
 
 		return brandRepository.save(brand);
 	}

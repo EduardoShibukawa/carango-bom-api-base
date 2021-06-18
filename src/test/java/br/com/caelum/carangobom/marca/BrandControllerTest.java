@@ -32,7 +32,7 @@ class BrandControllerTest {
 	private BrandService brandService;
 
 	@BeforeEach
-	public void configuraMock() {
+	public void configureMock() {
 		openMocks(this);
 
 		brandController = new BrandController(brandService);
@@ -40,37 +40,39 @@ class BrandControllerTest {
 	}
 
 	@Test
-	void deveRetornarListaQuandoHouverResultados() {
-		List<Brand> marcas = List.of(new Brand(1L, "Audi"), new Brand(2L, "BMW"), new Brand(3L, "Fiat"));
+	void shouldReturnBrandsWhenExists() {
+		List<Brand> brands = List.of(new Brand(1L, "Audi"), new Brand(2L, "BMW"), new Brand(3L, "Fiat"));
 
-		when(brandService.findAllByOrderByNome()).thenReturn(marcas);
+		when(brandService.findAllByOrderByName()).thenReturn(brands);
 
-		List<Brand> resultado = brandController.getAll();
-		assertEquals(marcas, resultado);
+		List<Brand> response = brandController.getAll();
+		assertEquals(brands, response);
 	}
 
 	@Test
-	void deveRetornarMarcaPeloId() {
-		Brand audi = new Brand(1L, "Audi");
+	void shouldReturnBrandById() {
+		Brand brand = new Brand(1L, "Audi");
 
-		when(brandService.findById(1L)).thenReturn(audi);
+		when(brandService.findById(1L)).thenReturn(brand);
 
-		ResponseEntity<Brand> resposta = brandController.findById(1L);
+		ResponseEntity<Brand> response = brandController.findById(1L);
 
-		assertEquals(audi, resposta.getBody());
-		assertEquals(HttpStatus.OK, resposta.getStatusCode());
+		assertEquals(brand, response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
 	@Test
-	void deveRetornarNotFoundQuandoRecuperarMarcaComIdInexistente() {
-		doThrow(BrandNotFoundException.class).when(brandService).findById(anyLong());
+	void shouldReturnNotFoundWhenBrandNotExists_findById() {
+		doThrow(BrandNotFoundException.class)
+			.when(brandService)
+			.findById(anyLong());
 
 		ResponseEntity<Brand> resposta = brandController.findById(1L);
 		assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
 	}
 
 	@Test
-	void deveResponderCreatedELocationQuandoCadastrarMarca() {
+	void shouldReturnCreatedWithLocationWhenBrandIsCreated(){
 		Brand nova = new Brand("Ferrari");
 
 		when(brandService.save(nova)).then(invocation -> {
@@ -96,11 +98,11 @@ class BrandControllerTest {
 		Brand brandResponse = response.getBody();
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());		
-		assertEquals("NOVA Audi", brandResponse.getNome());
+		assertEquals("NOVA Audi", brandResponse.getName());
 	}
 
 	@Test
-	void shouldReturnNotFoundIfBrandNotExits() {
+	void shouldReturnNotFoundIfBrandNotExits_update() {
 		doThrow(BrandNotFoundException.class)
 			.when(brandService)
 			.update(anyLong(), any());
@@ -124,7 +126,7 @@ class BrandControllerTest {
 	}
 
 	@Test
-	void shouldReturnNotFoundIfNotExists() {
+	void shouldReturnNotFoundIfBrandNotExists_delete() {
 		doThrow(BrandNotFoundException.class)
 			.when(brandService)
 			.delete(anyLong());

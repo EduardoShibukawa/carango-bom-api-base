@@ -26,8 +26,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.caelum.carangobom.domain.Brand;
 import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
 import br.com.caelum.carangobom.services.BrandService;
-import br.com.caelum.carangobom.validacao.ErroDeParametroOutputDto;
-import br.com.caelum.carangobom.validacao.ListaDeErrosOutputDto;
+import br.com.caelum.carangobom.validation.OutPutParameterListErrorDto;
+import br.com.caelum.carangobom.validation.OutputParameterErrorDto;
 
 @Controller
 public class BrandController {
@@ -42,7 +42,7 @@ public class BrandController {
     @ResponseBody
     @Transactional
     public List<Brand> getAll() {
-        return brandService.findAllByOrderByNome();
+        return brandService.findAllByOrderByName();
     }
 
     @GetMapping("/brands/{id}")
@@ -61,8 +61,13 @@ public class BrandController {
     @Transactional
     public ResponseEntity<Brand> save(@Valid @RequestBody Brand brandRequest, UriComponentsBuilder uriBuilder) {
         Brand brand = brandService.save(brandRequest);
-        URI h = uriBuilder.path("/brands/{id}").buildAndExpand(brandRequest.getId()).toUri();
-        return ResponseEntity.created(h).body(brand);
+        
+        URI uri = uriBuilder
+        			.path("/brands/{id}")
+        			.buildAndExpand(brandRequest.getId())
+        			.toUri();
+        
+        return ResponseEntity.created(uri).body(brand);
     }
 
     @PutMapping("/brands/{id}")
@@ -73,7 +78,6 @@ public class BrandController {
     		final Brand brand = brandService.update(id, brandRequest);
     		
     		return ResponseEntity.ok(brand);
-    		
     	} catch (BrandNotFoundException e) {
     		return ResponseEntity.notFound().build();
 		}
@@ -96,16 +100,24 @@ public class BrandController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ListaDeErrosOutputDto validate(MethodArgumentNotValidException excecao) {
-        List<ErroDeParametroOutputDto> paramExceptionList = new ArrayList<>();
-        excecao.getBindingResult().getFieldErrors().forEach(e -> {
-            ErroDeParametroOutputDto d = new ErroDeParametroOutputDto();
-            d.setParametro(e.getField());
-            d.setMensagem(e.getDefaultMessage());
-            paramExceptionList.add(d);
-        });
-        ListaDeErrosOutputDto exceptionList = new ListaDeErrosOutputDto();
-        exceptionList.setErros(paramExceptionList);
+    public OutPutParameterListErrorDto validate(MethodArgumentNotValidException exception) {
+        List<OutputParameterErrorDto> paramExceptionList = new ArrayList<>();
+        OutPutParameterListErrorDto exceptionList = new OutPutParameterListErrorDto();
+        
+        exception.getBindingResult()
+        	.getFieldErrors()
+        	.forEach(e -> {
+	            OutputParameterErrorDto d = new OutputParameterErrorDto();
+	            
+	            d.setParameter(e.getField());
+	            d.setMessage(e.getDefaultMessage());
+	            
+	            paramExceptionList.add(d);
+	        });
+        
+        
+        exceptionList.setErrors(paramExceptionList);
+        
         return exceptionList;
     }
 }

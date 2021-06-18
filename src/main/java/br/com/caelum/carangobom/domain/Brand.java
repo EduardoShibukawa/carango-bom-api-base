@@ -16,19 +16,19 @@ public class Brand {
 
     @NotBlank
     @Size(min = 2, message = "Deve ter {min} ou mais caracteres.")
-    private String nome;
+    private String name;
 
     public Brand() {
 
     }
 
-    public Brand(String nome) {
-        this(null, nome);
+    public Brand(String name) {
+        this(null, name);
     }
 
-    public Brand(Long id, String nome) {
+    public Brand(Long id, String name) {
         this.id = id;
-        this.nome = nome;
+        this.name = name;
     }
 
     public Long getId() {
@@ -39,11 +39,11 @@ public class Brand {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 }
