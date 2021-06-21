@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
 import br.com.caelum.carangobom.repositories.CarRepository;
 
+
+@Service
 public class CarService {
 	
 	private CarRepository repository;
