@@ -1,6 +1,7 @@
 package br.com.caelum.carangobom.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import br.com.caelum.carangobom.dtos.BrandRequest;
 import br.com.caelum.carangobom.dtos.BrandResponse;
@@ -21,26 +22,33 @@ public class BrandService {
 	}
 
 	public BrandResponse findById(Long id) {
-		return BrandResponse.fromModel(brandRepository.findBrand(id));
+		return BrandResponse
+					.fromModel(brandRepository.findBrand(id));
 	}
 
-	public Brand save(BrandRequest brandRequest) {
-		return brandRepository.save(brandRequest.toModel());
+	public BrandResponse save(BrandRequest brandRequest) {
+		return BrandResponse.fromModel(
+			brandRepository.save(brandRequest.toModel())
+		);
 	}
 
 	public void delete(Long id) {
 		brandRepository.delete(brandRepository.findBrand(id));
 	}
 
-	public List<Brand> findAllByOrderByName() {
-		return brandRepository.findAllByOrderByName();
+	public List<BrandResponse> findAllByOrderByName() {
+		return brandRepository
+				.findAllByOrderByName()
+				.stream()
+				.map((b) -> new BrandResponse(b.getId(), b.getName()))
+				.collect(Collectors.toUnmodifiableList());
 	}
 
-	public Brand update(Long id, BrandRequest brandRequest) {
+	public BrandResponse update(Long id, BrandRequest brandRequest) {
 		Brand brand = brandRepository.findBrand(id);
 
 		brand.setName(brandRequest.getName());
 
-		return brandRepository.save(brand);
+		return BrandResponse.fromModel(brandRepository.save(brand));
 	}
 }

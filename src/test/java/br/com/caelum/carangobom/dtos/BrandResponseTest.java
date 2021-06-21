@@ -1,15 +1,10 @@
 package br.com.caelum.carangobom.dtos;
 
-import br.com.caelum.carangobom.domain.Brand;
-import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doThrow;
+import org.junit.jupiter.api.Test;
+
+import br.com.caelum.carangobom.domain.Brand;
 
 class BrandResponseTest {
     @Test

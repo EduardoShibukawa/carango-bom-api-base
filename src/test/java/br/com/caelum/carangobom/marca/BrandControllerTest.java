@@ -43,12 +43,17 @@ class BrandControllerTest {
 
 	@Test
 	void shouldReturnBrandsWhenExists() {
-		List<Brand> brands = List.of(new Brand(1L, "Audi"), new Brand(2L, "BMW"), new Brand(3L, "Fiat"));
+		List<BrandResponse> brandsResponses = List.of(
+				new BrandResponse(1L, "Audi"), 
+				new BrandResponse(2L, "BMW"), 
+				new BrandResponse(3L, "Fiat"));
 
-		when(brandService.findAllByOrderByName()).thenReturn(brands);
+		when(brandService.findAllByOrderByName())
+			.thenReturn(brandsResponses);
 
-		List<Brand> response = brandController.getAll();
-		assertEquals(brands, response);
+		List<BrandResponse> response = brandController.getAll();
+		
+		assertEquals(brandsResponses, response);
 	}
 
 	@Test
@@ -80,12 +85,14 @@ class BrandControllerTest {
 		when(brandService.save(brandRequest)).then(invocation -> {
 			BrandRequest brandRequestArgument = invocation.getArgument(0, BrandRequest.class);
 			Brand brandSaved = brandRequestArgument.toModel();
+			
 			brandSaved.setId(1L);
 
-			return brandSaved;
+			return BrandResponse.fromModel(brandSaved);
 		});
 
-		ResponseEntity<Brand> result = brandController.save(brandRequest, uriBuilder);
+		ResponseEntity<BrandResponse> result = brandController.save(brandRequest, uriBuilder);
+		
 		assertEquals(HttpStatus.CREATED, result.getStatusCode());
 		assertEquals("http://localhost:8080/brands/1", result.getHeaders().getLocation().toString());
 	}
@@ -95,10 +102,10 @@ class BrandControllerTest {
 		BrandRequest brandRequest = new BrandRequest( "NOVA Audi");
 
 		when(brandService.update(1L, brandRequest))
-			.thenReturn(new Brand(1L, "NOVA Audi"));
+			.thenReturn(new BrandResponse(1L, "NOVA Audi"));
 
-		ResponseEntity<Brand> response = brandController.update(1L, brandRequest);
-		Brand brandResponse = response.getBody();
+		ResponseEntity<BrandResponse> response = brandController.update(1L, brandRequest);
+		BrandResponse brandResponse = response.getBody();
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());		
 		assertEquals("NOVA Audi", brandResponse.getName());
@@ -110,14 +117,14 @@ class BrandControllerTest {
 			.when(brandService)
 			.update(anyLong(), any());
 
-		ResponseEntity<Brand> result = brandController.update(1L, new BrandRequest( "NOVA Audi"));
+		ResponseEntity<BrandResponse> result = brandController.update(1L, new BrandRequest( "NOVA Audi"));
 
 		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
 	}
 
 	@Test
 	void shoudlDeleteBrand() {
-		ResponseEntity<Brand> response = brandController.delete(1L);
+		ResponseEntity<?> response = brandController.delete(1L);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
 		verify(brandService).delete(1L);
@@ -129,11 +136,10 @@ class BrandControllerTest {
 			.when(brandService)
 			.delete(anyLong());
 
-		ResponseEntity<Brand> response = brandController.delete(1L);
+		ResponseEntity<?> response = brandController.delete(1L);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
 		verify(brandService, times(1)).delete(any());
 	}
-
 }

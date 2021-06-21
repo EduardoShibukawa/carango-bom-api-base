@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import br.com.caelum.carangobom.dtos.BrandRequest;
-import br.com.caelum.carangobom.dtos.BrandResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.caelum.carangobom.domain.Brand;
+import br.com.caelum.carangobom.dtos.BrandRequest;
+import br.com.caelum.carangobom.dtos.BrandResponse;
 import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
 import br.com.caelum.carangobom.services.BrandService;
 import br.com.caelum.carangobom.validation.OutPutParameterListErrorDto;
@@ -47,7 +46,7 @@ public class BrandController {
     @GetMapping
     @ResponseBody
     @Transactional
-    public List<Brand> getAll() {
+    public List<BrandResponse> getAll() {
         return brandService.findAllByOrderByName();
     }
 
@@ -65,25 +64,25 @@ public class BrandController {
     @PostMapping
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> save(@Valid @RequestBody BrandRequest brandRequest, UriComponentsBuilder uriBuilder) {
-        Brand brand = brandService.save(brandRequest);
+    public ResponseEntity<BrandResponse> save(@Valid @RequestBody BrandRequest brandRequest, UriComponentsBuilder uriBuilder) {
+    	BrandResponse brandResponse = brandService.save(brandRequest);
         
         URI uri = uriBuilder
         			.path("/brands/{id}")
-        			.buildAndExpand(brand.getId())
+        			.buildAndExpand(brandResponse.getId())
         			.toUri();
         
-        return ResponseEntity.created(uri).body(brand);
+        return ResponseEntity.created(uri).body(brandResponse);
     }
 
     @PutMapping("/{id}")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> update(@PathVariable Long id, @Valid @RequestBody BrandRequest brandRequest) {
+    public ResponseEntity<BrandResponse> update(@PathVariable Long id, @Valid @RequestBody BrandRequest brandRequest) {
     	try {
-    		final Brand brand = brandService.update(id, brandRequest);
+    		final BrandResponse brandResponse = brandService.update(id, brandRequest);
     		
-    		return ResponseEntity.ok(brand);
+    		return ResponseEntity.ok(brandResponse);
     	} catch (BrandNotFoundException e) {
     		return ResponseEntity.notFound().build();
 		}
@@ -92,7 +91,7 @@ public class BrandController {
     @DeleteMapping("/{id}")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
     	try {
             brandService.delete(id);
             
