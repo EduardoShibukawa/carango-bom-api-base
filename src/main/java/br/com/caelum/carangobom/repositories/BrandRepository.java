@@ -10,12 +10,12 @@ import br.com.caelum.carangobom.domain.Brand;
 
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 
-    public void delete(Brand brand);
+    void delete(Brand brand);
     
-    public Brand save(Brand brand);
+    Brand save(Brand brand);
     
-    public Optional<Brand> findById(Long id);
+    Optional<Brand> findById(Long id);
     
-    public List<Brand> findAllByOrderByName();
+    List<Brand> findAllByOrderByName();
     
 }
