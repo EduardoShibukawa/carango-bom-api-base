@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,22 +31,25 @@ import br.com.caelum.carangobom.validation.OutPutParameterListErrorDto;
 import br.com.caelum.carangobom.validation.OutputParameterErrorDto;
 
 @Controller
+@RequestMapping("brands")
 public class BrandController {
+	
     private  final BrandService brandService;
+    
     @Autowired
     public BrandController(BrandService brandService) {
 
         this.brandService = brandService;
     }
 
-    @GetMapping("/brands")
+    @GetMapping
     @ResponseBody
     @Transactional
     public List<Brand> getAll() {
         return brandService.findAllByOrderByName();
     }
 
-    @GetMapping("/brands/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     @Transactional
     public ResponseEntity<Brand> findById(@PathVariable Long id) {
@@ -56,7 +60,7 @@ public class BrandController {
 		}
     }
 
-    @PostMapping("/brands")
+    @PostMapping
     @ResponseBody
     @Transactional
     public ResponseEntity<Brand> save(@Valid @RequestBody Brand brandRequest, UriComponentsBuilder uriBuilder) {
@@ -70,7 +74,7 @@ public class BrandController {
         return ResponseEntity.created(uri).body(brand);
     }
 
-    @PutMapping("/brands/{id}")
+    @PutMapping("/{id}")
     @ResponseBody
     @Transactional
     public ResponseEntity<Brand> update(@PathVariable Long id, @Valid @RequestBody Brand brandRequest) {
@@ -83,7 +87,7 @@ public class BrandController {
 		}
     }
 
-    @DeleteMapping("/brands/{id}")
+    @DeleteMapping("/{id}")
     @ResponseBody
     @Transactional
     public ResponseEntity<Brand> delete(@PathVariable Long id) {
