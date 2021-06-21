@@ -11,6 +11,8 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.List;
 
+import br.com.caelum.carangobom.dtos.BrandRequest;
+import br.com.caelum.carangobom.dtos.BrandResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -51,13 +53,13 @@ class BrandControllerTest {
 
 	@Test
 	void shouldReturnBrandById() {
-		Brand brand = new Brand(1L, "Audi");
+		BrandResponse brandResponse = new BrandResponse(1L, "Audi");
 
-		when(brandService.findById(1L)).thenReturn(brand);
+		when(brandService.findById(1L)).thenReturn(brandResponse);
 
-		ResponseEntity<Brand> response = brandController.findById(1L);
+		ResponseEntity<BrandResponse> response = brandController.findById(1L);
 
-		assertEquals(brand, response.getBody());
+		assertEquals(brandResponse, response.getBody());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
@@ -67,36 +69,37 @@ class BrandControllerTest {
 			.when(brandService)
 			.findById(anyLong());
 
-		ResponseEntity<Brand> resposta = brandController.findById(1L);
-		assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+		ResponseEntity<BrandResponse> result = brandController.findById(1L);
+		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
 	}
 
 	@Test
 	void shouldReturnCreatedWithLocationWhenBrandIsCreated(){
-		Brand nova = new Brand("Ferrari");
+		BrandRequest brandRequest = new BrandRequest("Ferrari");
 
-		when(brandService.save(nova)).then(invocation -> {
-			Brand brandSalva = invocation.getArgument(0, Brand.class);
-			brandSalva.setId(1L);
+		when(brandService.save(brandRequest)).then(invocation -> {
+			BrandRequest brandRequestArgument = invocation.getArgument(0, BrandRequest.class);
+			Brand brandSaved = brandRequestArgument.toModel();
+			brandSaved.setId(1L);
 
-			return brandSalva;
+			return brandSaved;
 		});
 
-		ResponseEntity<Brand> resposta = brandController.save(nova, uriBuilder);
-		assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
-		assertEquals("http://localhost:8080/brands/1", resposta.getHeaders().getLocation().toString());
+		ResponseEntity<Brand> result = brandController.save(brandRequest, uriBuilder);
+		assertEquals(HttpStatus.CREATED, result.getStatusCode());
+		assertEquals("http://localhost:8080/brands/1", result.getHeaders().getLocation().toString());
 	}
 
 	@Test
 	void shouldUpdateNameWhenBrandExists() {
-		Brand brandRequest = new Brand(1L, "NOVA Audi");
+		BrandRequest brandRequest = new BrandRequest( "NOVA Audi");
 
 		when(brandService.update(1L, brandRequest))
-			.thenReturn(brandRequest);
+			.thenReturn(new Brand(1L, "NOVA Audi"));
 
 		ResponseEntity<Brand> response = brandController.update(1L, brandRequest);
 		Brand brandResponse = response.getBody();
-		
+
 		assertEquals(HttpStatus.OK, response.getStatusCode());		
 		assertEquals("NOVA Audi", brandResponse.getName());
 	}
@@ -107,18 +110,13 @@ class BrandControllerTest {
 			.when(brandService)
 			.update(anyLong(), any());
 
-		ResponseEntity<Brand> resposta = brandController.update(1L, new Brand(1L, "NOVA Audi"));
+		ResponseEntity<Brand> result = brandController.update(1L, new BrandRequest( "NOVA Audi"));
 
-		assertEquals(HttpStatus.NOT_FOUND, resposta.getStatusCode());
+		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
 	}
 
 	@Test
 	void shoudlDeleteBrand() {
-		Brand brand = new Brand(1l, "Audi");
-
-		when(brandService.findById(1L))
-			.thenReturn(brand);
-
 		ResponseEntity<Brand> response = brandController.delete(1L);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 

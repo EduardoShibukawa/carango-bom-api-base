@@ -3,6 +3,8 @@ package br.com.caelum.carangobom.repositories;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.caelum.carangobom.dtos.BrandResponse;
+import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.caelum.carangobom.domain.Brand;
@@ -17,5 +19,14 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
     Optional<Brand> findById(Long id);
     
     List<Brand> findAllByOrderByName();
-    
+
+    default Brand findBrand(Long id){
+        Optional<Brand> optional = findById(id);
+
+        if (optional.isEmpty()) {
+            throw new BrandNotFoundException();
+        }
+
+        return optional.get();
+    }
 }

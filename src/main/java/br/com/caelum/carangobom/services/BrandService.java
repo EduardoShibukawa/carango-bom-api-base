@@ -1,13 +1,13 @@
 package br.com.caelum.carangobom.services;
 
 import java.util.List;
-import java.util.Optional;
 
+import br.com.caelum.carangobom.dtos.BrandRequest;
+import br.com.caelum.carangobom.dtos.BrandResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.caelum.carangobom.domain.Brand;
-import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
 import br.com.caelum.carangobom.repositories.BrandRepository;
 
 @Service
@@ -20,30 +20,24 @@ public class BrandService {
 		this.brandRepository = brandRepository;
 	}
 
-	public Brand findById(Long id) {
-		Optional<Brand> optional = brandRepository.findById(id);
-
-		if (optional.isEmpty()) {
-			throw new BrandNotFoundException();
-		}
-
-		return optional.get();
+	public BrandResponse findById(Long id) {
+		return BrandResponse.fromModel(brandRepository.findBrand(id));
 	}
 
-	public Brand save(Brand brand) {
-		return brandRepository.save(brand);
+	public Brand save(BrandRequest brandRequest) {
+		return brandRepository.save(brandRequest.toModel());
 	}
 
 	public void delete(Long id) {
-		brandRepository.delete(findById(id));
+		brandRepository.delete(brandRepository.findBrand(id));
 	}
 
 	public List<Brand> findAllByOrderByName() {
 		return brandRepository.findAllByOrderByName();
 	}
 
-	public Brand update(Long id, Brand brandRequest) {
-		Brand brand = findById(id);
+	public Brand update(Long id, BrandRequest brandRequest) {
+		Brand brand = brandRepository.findBrand(id);
 
 		brand.setName(brandRequest.getName());
 

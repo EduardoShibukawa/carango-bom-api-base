@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import br.com.caelum.carangobom.dtos.BrandRequest;
+import br.com.caelum.carangobom.dtos.BrandResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +54,7 @@ public class BrandController {
     @GetMapping("/{id}")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> findById(@PathVariable Long id) {
+    public ResponseEntity<BrandResponse> findById(@PathVariable Long id) {
     	try {
     		return ResponseEntity.ok(brandService.findById(id));
     	} catch (BrandNotFoundException e) {
@@ -63,12 +65,12 @@ public class BrandController {
     @PostMapping
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> save(@Valid @RequestBody Brand brandRequest, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Brand> save(@Valid @RequestBody BrandRequest brandRequest, UriComponentsBuilder uriBuilder) {
         Brand brand = brandService.save(brandRequest);
         
         URI uri = uriBuilder
         			.path("/brands/{id}")
-        			.buildAndExpand(brandRequest.getId())
+        			.buildAndExpand(brand.getId())
         			.toUri();
         
         return ResponseEntity.created(uri).body(brand);
@@ -77,7 +79,7 @@ public class BrandController {
     @PutMapping("/{id}")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> update(@PathVariable Long id, @Valid @RequestBody Brand brandRequest) {
+    public ResponseEntity<Brand> update(@PathVariable Long id, @Valid @RequestBody BrandRequest brandRequest) {
     	try {
     		final Brand brand = brandService.update(id, brandRequest);
     		
