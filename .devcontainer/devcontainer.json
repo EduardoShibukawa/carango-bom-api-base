@@ -1,0 +1,22 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/java
+{
+	"name": "Carango Bom API",
+	"dockerComposeFile": [ "../mysql/docker-compose.yaml", "./docker-compose.yaml" ],
+	"service": "api",
+	"runServices": [ "db" ],
+	"workspaceFolder": "/workspaces/carango-bom-api",
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"java.home": "/docker-java-home"
+	},
+	"extensions": [
+		"vscjava.vscode-java-pack",
+		"vscjava.vscode-java-debug",
+		"redhat.fabric8-analytics",
+		"vscjava.vscode-java-test",
+		"redhat.vscode-xml",
+		"pivotal.vscode-spring-boot"
+	],
+	"remoteUser": "vscode"
+}
