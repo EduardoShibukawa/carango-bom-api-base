@@ -6,6 +6,9 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -19,6 +22,7 @@ import org.mockito.Mock;
 import br.com.caelum.carangobom.domain.Brand;
 import br.com.caelum.carangobom.domain.Car;
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
+import br.com.caelum.carangobom.dtos.CarRequest;
 import br.com.caelum.carangobom.repositories.CarRepository;
 
 class CarServiceTest {
@@ -72,6 +76,27 @@ class CarServiceTest {
 					hasProperty("value", is(BigDecimal.valueOf(5000L)))	
 				)
 		));
+	}
+	
+	@Test
+	void save_shouldCreate() {
+		CarRequest carRequest = new CarRequest(1l, "KA", 2011, BigDecimal.valueOf(10000L));
+		Car car = new Car(1l, new Brand(1l, "Ford"), "KA", 2011, BigDecimal.valueOf(10000L));
+		
+		
+		when(this.carRepositoryMock.save(any(Car.class)))
+			.thenReturn(car);
+		
+		CarDetailResponse result = this.carService.save(carRequest);
+		
+		assertEquals(car.getId(), result.getId());
+		assertEquals(car.getBrand().getName(), result.getBrand());
+		assertEquals(car.getModel(), result.getModel());
+		assertEquals(car.getYear(), result.getYear());
+		assertEquals(car.getValue(), result.getValue());
+		
+		verify(carRepositoryMock).save(any(Car.class));
+		
 	}
 
 }

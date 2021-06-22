@@ -1,4 +1,4 @@
-package br.com.caelum.carangobom.marca;
+package br.com.caelum.carangobom.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -11,8 +11,6 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.List;
 
-import br.com.caelum.carangobom.dtos.BrandRequest;
-import br.com.caelum.carangobom.dtos.BrandResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,8 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.caelum.carangobom.controllers.BrandController;
 import br.com.caelum.carangobom.domain.Brand;
+import br.com.caelum.carangobom.dtos.BrandRequest;
+import br.com.caelum.carangobom.dtos.BrandResponse;
 import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
 import br.com.caelum.carangobom.services.BrandService;
 

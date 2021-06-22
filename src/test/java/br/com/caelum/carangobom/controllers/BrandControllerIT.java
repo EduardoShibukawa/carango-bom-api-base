@@ -1,4 +1,4 @@
-package br.com.caelum.carangobom.marca;
+package br.com.caelum.carangobom.controllers;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

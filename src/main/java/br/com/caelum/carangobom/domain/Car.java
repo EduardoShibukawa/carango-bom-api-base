@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Car {
@@ -20,14 +21,24 @@ public class Car {
 	@JoinColumn(name = "BRAND_ID")
 	private Brand brand;
 	
+	@NotNull
 	private String model;
 	
+	@NotNull
 	private Integer year;
 	
+	@NotNull
 	private BigDecimal value;
 	
 	
 	public Car() {}
+
+	public Car(Brand brand, String model, Integer year, BigDecimal value) {
+		this.brand = brand;
+		this.model = model;
+		this.year = year;
+		this.value = value;
+	}
 
 
 	public Car(Long id, Brand brand, String model, Integer year, BigDecimal value) {

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BrandRequestTest {
     @Test
-    void createBrandFromModel() {
+    void createBrandFromRequest() {
         BrandRequest brandRequest = new BrandRequest("Audi");
         Brand brand = brandRequest.toModel();
 

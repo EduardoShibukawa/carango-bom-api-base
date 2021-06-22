@@ -18,10 +18,12 @@ public class Brand {
     @Size(min = 2, message = "Deve ter {min} ou mais caracteres.")
     private String name;
 
-    public Brand() {
+    public Brand() {}
 
+    public Brand(Long id) {
+    	this.id = id;
     }
-
+    
     public Brand(String name) {
         this(null, name);
     }
