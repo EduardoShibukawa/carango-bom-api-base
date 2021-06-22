@@ -73,4 +73,12 @@ class CarControllerTest {
 		carController.delete(1L);
 		verify(carService).delete(1L);
 	}
+
+	@Test
+	void shouldUpdateCar() {
+		CarRequest carRequest = new CarRequest(1L, "Ka", 2012, BigDecimal.valueOf(15000.00));
+		ResponseEntity<CarDetailResponse> result = carController.update(1L, carRequest);
+		verify(carService).update(1L, carRequest);
+		assertEquals(HttpStatus.OK, result.getStatusCode());
+	}
 }

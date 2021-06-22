@@ -47,4 +47,10 @@ public class CarController {
 		carService.delete(id);
 		return ResponseEntity.ok().build();
 	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<CarDetailResponse> update(@PathVariable long id, @RequestBody @Valid CarRequest carRequest) {
+		CarDetailResponse response = carService.update(id, carRequest);
+		return ResponseEntity.ok(response);
+	}
 }

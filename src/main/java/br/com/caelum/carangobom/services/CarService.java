@@ -1,15 +1,15 @@
 package br.com.caelum.carangobom.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import br.com.caelum.carangobom.domain.Brand;
 import br.com.caelum.carangobom.domain.Car;
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
 import br.com.caelum.carangobom.dtos.CarRequest;
 import br.com.caelum.carangobom.repositories.CarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService {
@@ -35,5 +35,16 @@ public class CarService {
 	public void delete(Long id) {
 		Car car = carRepository.findCar(id);
 		carRepository.delete(car);
+	}
+
+	public CarDetailResponse update(long id, CarRequest request) {
+		Car car = carRepository.findCar(id);
+
+		car.setBrand(new Brand(request.getIdBrand()));
+		car.setModel(request.getModel());
+		car.setYear(request.getYear());
+		car.setValue(request.getValue());
+
+		return CarDetailResponse.fromModel(carRepository.save(car));
 	}
 }

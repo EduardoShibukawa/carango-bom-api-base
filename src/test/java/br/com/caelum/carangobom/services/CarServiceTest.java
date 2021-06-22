@@ -114,4 +114,31 @@ class CarServiceTest {
 
 		assertThrows(CarNotFoundException.class, () -> carService.delete(1L));
 	}
+
+	@Test
+	void shouldUpdate() {
+		CarRequest request = new CarRequest(1L, "New Ka", 2012, BigDecimal.valueOf(15000.00));
+
+		Car carToUpdate = new Car(new Brand("Ford"), "Ka",2011,BigDecimal.valueOf(10000.00));
+		Car carUpdated = new Car(new Brand("Ford"), "NewKa",2012,BigDecimal.valueOf(15000.00));
+
+		when(carRepositoryMock.findCar(1L))
+				.thenReturn(carToUpdate);
+		when(carRepositoryMock.save(carToUpdate))
+				.thenReturn(carUpdated);
+
+		carService.update(1L, request);
+
+		verify(carRepositoryMock).save(carToUpdate);
+	}
+
+	@Test
+	void whenUpdateAndCarNotExists_shouldThrowCarNotFoundException() {
+		CarRequest request = new CarRequest(1L, "New Ka", 2012, BigDecimal.valueOf(15000.00));
+
+		doThrow(CarNotFoundException.class)
+				.when(carRepositoryMock).findCar(1L);
+
+		assertThrows(CarNotFoundException.class, () -> carService.update(1L, request));
+	}
 }
