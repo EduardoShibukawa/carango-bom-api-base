@@ -104,4 +104,27 @@ class CarControllerTest {
 
 		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
 	}
+
+	@Test
+	void whenFindByIdAndCarNotExist_shouldReturnStatusNotFound() {
+		doThrow(CarNotFoundException.class)
+				.when(carService).findById(1L);
+
+		ResponseEntity<CarDetailResponse> result = carController.findById(1L);
+
+		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+	}
+
+	@Test
+	void whenFindByIdAndCarExist_shouldReturnCarDetailResponse() {
+		CarDetailResponse carDetailResponse = new CarDetailResponse(1L, new BrandResponse(1L, "Ford"), "Ka", 2011, BigDecimal.valueOf(10000.00));
+
+		when(carService.findById(1L))
+				.thenReturn(carDetailResponse);
+
+		ResponseEntity<CarDetailResponse> result = carController.findById(1L);
+
+		assertEquals(HttpStatus.OK, result.getStatusCode());
+		assertEquals(carDetailResponse, result.getBody());
+	}
 }

@@ -14,37 +14,41 @@ import java.util.stream.Collectors;
 @Service
 public class CarService {
 
-	private CarRepository carRepository;
+    private CarRepository carRepository;
 
-	@Autowired
-	public CarService(CarRepository carRepository) {
-		this.carRepository = carRepository;
-	}
+    @Autowired
+    public CarService(CarRepository carRepository) {
+        this.carRepository = carRepository;
+    }
 
-	public List<CarDetailResponse> findAll() {
-		return carRepository.findAll().stream().map(CarDetailResponse::fromModel)
-				.collect(Collectors.toUnmodifiableList());
-	}
+    public List<CarDetailResponse> findAll() {
+        return carRepository.findAll().stream().map(CarDetailResponse::fromModel)
+                .collect(Collectors.toUnmodifiableList());
+    }
 
-	public CarDetailResponse save(CarRequest carRequest) {
-		final Car car = carRequest.toModel();
+    public CarDetailResponse save(CarRequest carRequest) {
+        final Car car = carRequest.toModel();
 
-		return CarDetailResponse.fromModel(carRepository.save(car));
-	}
+        return CarDetailResponse.fromModel(carRepository.save(car));
+    }
 
-	public void delete(Long id) {
-		Car car = carRepository.findCar(id);
-		carRepository.delete(car);
-	}
+    public void delete(Long id) {
+        Car car = carRepository.findCar(id);
+        carRepository.delete(car);
+    }
 
-	public CarDetailResponse update(long id, CarRequest request) {
-		Car car = carRepository.findCar(id);
+    public CarDetailResponse update(long id, CarRequest request) {
+        Car car = carRepository.findCar(id);
 
-		car.setBrand(new Brand(request.getIdBrand()));
-		car.setModel(request.getModel());
-		car.setYear(request.getYear());
-		car.setValue(request.getValue());
+        car.setBrand(new Brand(request.getIdBrand()));
+        car.setModel(request.getModel());
+        car.setYear(request.getYear());
+        car.setValue(request.getValue());
 
-		return CarDetailResponse.fromModel(carRepository.save(car));
-	}
+        return CarDetailResponse.fromModel(carRepository.save(car));
+    }
+
+    public CarDetailResponse findById(long id) {
+        return CarDetailResponse.fromModel(carRepository.findCar(id));
+    }
 }

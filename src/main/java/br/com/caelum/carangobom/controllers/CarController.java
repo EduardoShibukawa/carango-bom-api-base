@@ -62,4 +62,13 @@ public class CarController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<CarDetailResponse> findById(@PathVariable long id) {
+		try {
+			return ResponseEntity.ok(carService.findById(id));
+		}catch (CarNotFoundException e){
+			return ResponseEntity.notFound().build();
+		}
+	}
 }

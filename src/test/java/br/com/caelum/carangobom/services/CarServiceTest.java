@@ -142,4 +142,28 @@ class CarServiceTest {
 
 		assertThrows(CarNotFoundException.class, () -> carService.update(1L, request));
 	}
+
+	@Test
+	void whenFindCarById_shouldReturnCarDetailResponse() {
+		Car car = new Car(new Brand(1L, "Ford"), "Ka", 2011, BigDecimal.valueOf(10000.00));
+		when(carRepositoryMock.findCar(1L))
+				.thenReturn(car);
+
+		CarDetailResponse result = carService.findById(1L);
+
+		assertEquals(car.getBrand().getName(), result.getBrand().getName());
+		assertEquals(car.getBrand().getId(), result.getBrand().getId());
+		assertEquals(car.getId(), result.getId());
+		assertEquals(car.getModel(), result.getModel());
+		assertEquals(car.getYear(), result.getYear());
+		assertEquals(car.getValue(), result.getValue());
+	}
+
+	@Test
+	void whenCarIsNotFound_shouldThrowCarNotFoundException() {
+		doThrow(CarNotFoundException.class)
+				.when(carRepositoryMock).findCar(1L);
+
+		assertThrows(CarNotFoundException.class, () -> carService.findById(1L));
+	}
 }
