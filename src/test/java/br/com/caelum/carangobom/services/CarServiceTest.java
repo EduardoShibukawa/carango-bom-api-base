@@ -1,29 +1,25 @@
 package br.com.caelum.carangobom.services;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
-
-import java.math.BigDecimal;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-
 import br.com.caelum.carangobom.domain.Brand;
 import br.com.caelum.carangobom.domain.Car;
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
 import br.com.caelum.carangobom.dtos.CarRequest;
+import br.com.caelum.carangobom.exceptions.CarNotFoundException;
 import br.com.caelum.carangobom.repositories.CarRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class CarServiceTest {
 
@@ -99,4 +95,23 @@ class CarServiceTest {
 		
 	}
 
+	@Test
+	void should_delete() {
+		Car car = new Car();
+		when(carRepositoryMock.findCar(1L))
+				.thenReturn(car);
+
+		carService.delete(1L);
+
+		verify(carRepositoryMock).delete(car);
+	}
+
+	@Test
+	void whenDeleteAndCarNotExists_shouldThrowCarNotFoundException() {
+		doThrow(CarNotFoundException.class)
+				.when(carRepositoryMock)
+				.findCar(1L);
+
+		assertThrows(CarNotFoundException.class, () -> carService.delete(1L));
+	}
 }

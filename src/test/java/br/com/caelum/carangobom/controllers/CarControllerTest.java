@@ -1,13 +1,8 @@
 package br.com.caelum.carangobom.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
-
-import java.math.BigDecimal;
-import java.util.List;
-
+import br.com.caelum.carangobom.dtos.CarDetailResponse;
+import br.com.caelum.carangobom.dtos.CarRequest;
+import br.com.caelum.carangobom.services.CarService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,9 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.caelum.carangobom.dtos.CarDetailResponse;
-import br.com.caelum.carangobom.dtos.CarRequest;
-import br.com.caelum.carangobom.services.CarService;
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class CarControllerTest {
 
@@ -61,11 +60,17 @@ class CarControllerTest {
 		
 		ResponseEntity<CarDetailResponse> result = carController.save(carRequest, uriBuilder);
 		
-		assertEquals(HttpStatus.OK, result.getStatusCode());
+		assertEquals(HttpStatus.CREATED, result.getStatusCode());
 		assertEquals(carResponse, result.getBody());
 
-		assertEquals("http://localhost:8080/brands/1", result.getHeaders().getLocation().toString());
+		assertEquals("http://localhost:8080/cars/1", result.getHeaders().getLocation().toString());
 		
 		verify(carService).save(Mockito.any(CarRequest.class));
+	}
+
+	@Test
+	void shouldDeleteCar() {
+		carController.delete(1L);
+		verify(carService).delete(1L);
 	}
 }

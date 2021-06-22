@@ -32,4 +32,8 @@ public class CarService {
 		return CarDetailResponse.fromModel(carRepository.save(car));
 	}
 
+	public void delete(Long id) {
+		Car car = carRepository.findCar(id);
+		carRepository.delete(car);
+	}
 }
