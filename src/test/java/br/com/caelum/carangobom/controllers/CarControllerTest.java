@@ -3,6 +3,7 @@ package br.com.caelum.carangobom.controllers;
 import br.com.caelum.carangobom.dtos.BrandResponse;
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
 import br.com.caelum.carangobom.dtos.CarRequest;
+import br.com.caelum.carangobom.exceptions.CarNotFoundException;
 import br.com.caelum.carangobom.services.CarService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class CarControllerTest {
@@ -71,8 +71,18 @@ class CarControllerTest {
 
 	@Test
 	void shouldDeleteCar() {
-		carController.delete(1L);
+		ResponseEntity<?> responseEntity = carController.delete(1L);
 		verify(carService).delete(1L);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	}
+
+	@Test
+	void whenDeleteAndCarNotExist_shouldReturnStatusNotFound() {
+		doThrow(CarNotFoundException.class)
+				.when(carService).delete(1L);
+
+		ResponseEntity<?> responseEntity = carController.delete(1L);
+		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 	}
 
 	@Test
@@ -81,5 +91,17 @@ class CarControllerTest {
 		ResponseEntity<CarDetailResponse> result = carController.update(1L, carRequest);
 		verify(carService).update(1L, carRequest);
 		assertEquals(HttpStatus.OK, result.getStatusCode());
+	}
+
+	@Test
+	void whenUpdateAndCarNotExist_shouldReturnStatusNotFound() {
+		CarRequest carRequest = new CarRequest(1L, "Ka", 2012, BigDecimal.valueOf(15000.00));
+
+		doThrow(CarNotFoundException.class)
+				.when(carService).update(1L, carRequest);
+
+		ResponseEntity<CarDetailResponse> result = carController.update(1L, carRequest);
+
+		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
 	}
 }

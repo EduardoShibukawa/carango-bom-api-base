@@ -2,6 +2,7 @@ package br.com.caelum.carangobom.controllers;
 
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
 import br.com.caelum.carangobom.dtos.CarRequest;
+import br.com.caelum.carangobom.exceptions.CarNotFoundException;
 import br.com.caelum.carangobom.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,13 +45,21 @@ public class CarController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
-		carService.delete(id);
-		return ResponseEntity.ok().build();
+		try {
+			carService.delete(id);
+			return ResponseEntity.ok().build();
+		}catch (CarNotFoundException e){
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<CarDetailResponse> update(@PathVariable long id, @RequestBody @Valid CarRequest carRequest) {
-		CarDetailResponse response = carService.update(id, carRequest);
-		return ResponseEntity.ok(response);
+		try {
+			CarDetailResponse response = carService.update(id, carRequest);
+			return ResponseEntity.ok(response);
+		}catch (CarNotFoundException e){
+			return ResponseEntity.notFound().build();
+		}
 	}
 }
