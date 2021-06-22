@@ -1,5 +1,6 @@
 package br.com.caelum.carangobom.controllers;
 
+import br.com.caelum.carangobom.dtos.BrandResponse;
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
 import br.com.caelum.carangobom.dtos.CarRequest;
 import br.com.caelum.carangobom.services.CarService;
@@ -38,9 +39,9 @@ class CarControllerTest {
 	@Test
 	void shouldReturnBrandsWhenExists() {
 		List<CarDetailResponse> carDetailsResponse = List.of(
-				new CarDetailResponse(1L, "Audi", "A3", 2016, BigDecimal.valueOf(150000L)), 
-				new CarDetailResponse(2L, "Ford","Ka", 2011, BigDecimal.valueOf(10000L)), 
-				new CarDetailResponse(3L, "Fiat", "Uno", 2000, BigDecimal.valueOf(5000L)));
+				new CarDetailResponse(1L, new BrandResponse(1L,"Audi"), "A3", 2016, BigDecimal.valueOf(150000L)),
+				new CarDetailResponse(2L, new BrandResponse(2L,"Ford"),"Ka", 2011, BigDecimal.valueOf(10000L)),
+				new CarDetailResponse(3L, new BrandResponse(3L,"Fiat"), "Uno", 2000, BigDecimal.valueOf(5000L)));
 
 		when(carService.findAll())
 			.thenReturn(carDetailsResponse);
@@ -53,7 +54,7 @@ class CarControllerTest {
 	@Test
 	void shouldCreateCar() {
 		CarRequest carRequest = new CarRequest(1L, "A3", 2016, BigDecimal.valueOf(150000L));
-		CarDetailResponse carResponse = new CarDetailResponse(1L, "Audi", "A3", 2016, BigDecimal.valueOf(150000L));
+		CarDetailResponse carResponse = new CarDetailResponse(1L, new BrandResponse(1L,"Audi"), "A3", 2016, BigDecimal.valueOf(150000L));
 		
 		when(carService.save(carRequest))
 			.thenReturn(carResponse);

@@ -2,6 +2,7 @@ package br.com.caelum.carangobom.services;
 
 import br.com.caelum.carangobom.domain.Brand;
 import br.com.caelum.carangobom.domain.Car;
+import br.com.caelum.carangobom.dtos.BrandResponse;
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
 import br.com.caelum.carangobom.dtos.CarRequest;
 import br.com.caelum.carangobom.exceptions.CarNotFoundException;
@@ -37,9 +38,9 @@ class CarServiceTest {
 	@Test
 	void findAll_shouldReturnCarDetails() {
         List<Car> cars = List.of(
-    		new Car(1L, new Brand("Audi"), "A3", 2016, BigDecimal.valueOf(150000L)), 
-    		new Car(2L, new Brand("Ford"),"Ka", 2011, BigDecimal.valueOf(10000L)), 
-    		new Car(3L, new Brand("Fiat"), "Uno", 2000, BigDecimal.valueOf(5000L))
+    		new Car(1L, new Brand(1L, "Audi"), "A3", 2016, BigDecimal.valueOf(150000L)),
+    		new Car(2L, new Brand(2L, "Ford"),"Ka", 2011, BigDecimal.valueOf(10000L)),
+    		new Car(3L, new Brand(3L, "Fiat"), "Uno", 2000, BigDecimal.valueOf(5000L))
 		);
         
         when(carRepositoryMock.findAll()).thenReturn(cars);
@@ -50,7 +51,7 @@ class CarServiceTest {
         assertThat(result , contains(
         		allOf(
     				hasProperty("id", is(1L)), 
-    				hasProperty("brand", is("Audi")),
+    				hasProperty("brand", is(new BrandResponse(1L, "Audi"))),
     				hasProperty("model", is("A3")),
 					hasProperty("year", is(2016)),
 					hasProperty("value", is(BigDecimal.valueOf(150000L)))
@@ -58,7 +59,7 @@ class CarServiceTest {
 				),
         		allOf(
     				hasProperty("id", is(2L)), 
-    				hasProperty("brand", is("Ford")),
+    				hasProperty("brand", is(new BrandResponse(2L,"Ford"))),
     				hasProperty("model", is("Ka")),
 					hasProperty("year", is(2011)),
 					hasProperty("value", is(BigDecimal.valueOf(10000L)))
@@ -66,7 +67,7 @@ class CarServiceTest {
 				),
         		allOf(
     				hasProperty("id", is(3L)), 
-    				hasProperty("brand", is("Fiat")),
+    				hasProperty("brand", is(new BrandResponse(3L,"Fiat"))),
     				hasProperty("model", is("Uno")),
 					hasProperty("year", is(2000)),
 					hasProperty("value", is(BigDecimal.valueOf(5000L)))	
@@ -86,7 +87,7 @@ class CarServiceTest {
 		CarDetailResponse result = this.carService.save(carRequest);
 		
 		assertEquals(car.getId(), result.getId());
-		assertEquals(car.getBrand().getName(), result.getBrand());
+		assertEquals(car.getBrand().getName(), result.getBrand().getName());
 		assertEquals(car.getModel(), result.getModel());
 		assertEquals(car.getYear(), result.getYear());
 		assertEquals(car.getValue(), result.getValue());

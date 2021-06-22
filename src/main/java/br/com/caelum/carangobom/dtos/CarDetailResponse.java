@@ -1,21 +1,21 @@
 package br.com.caelum.carangobom.dtos;
 
+import br.com.caelum.carangobom.domain.Car;
+
 import java.math.BigDecimal;
 import java.util.Objects;
-
-import br.com.caelum.carangobom.domain.Car;
 
 public class CarDetailResponse {
 
 	private Long id;
-	private String brand;
+	private BrandResponse brand;
 	private String model;
 	private Integer year;
 	private BigDecimal value;
 	
 	public CarDetailResponse() {}
 
-	public CarDetailResponse(Long id, String brand, String model, Integer year, BigDecimal value) {
+	public CarDetailResponse(Long id, BrandResponse brand, String model, Integer year, BigDecimal value) {
 		super();
 		this.id = id;
 		this.brand = brand;
@@ -27,7 +27,7 @@ public class CarDetailResponse {
 	public static CarDetailResponse fromModel(Car car) {
 		return new CarDetailResponse(
 				car.getId(),
-				Objects.requireNonNull(car.getBrand(), "Brand is empty").getName(), 
+				BrandResponse.fromModel(Objects.requireNonNull(car.getBrand(), "Brand is empty")),
 				car.getModel(), 
 				car.getYear(), 
 				car.getValue());
@@ -41,11 +41,11 @@ public class CarDetailResponse {
 		this.id = id;
 	}
 
-	public String getBrand() {
+	public BrandResponse getBrand() {
 		return brand;
 	}
 
-	public void setBrand(String brand) {
+	public void setBrand(BrandResponse brand) {
 		this.brand = brand;
 	}
 
