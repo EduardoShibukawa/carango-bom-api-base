@@ -1,17 +1,27 @@
 package br.com.caelum.carangobom.controllers;
 
+import java.net.URI;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
+import br.com.caelum.carangobom.dtos.CarFilterRequest;
 import br.com.caelum.carangobom.dtos.CarRequest;
 import br.com.caelum.carangobom.exceptions.CarNotFoundException;
 import br.com.caelum.carangobom.services.CarService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
 
 
 @RestController
@@ -26,8 +36,8 @@ public class CarController {
 	}
 
 	@GetMapping	
-	public List<CarDetailResponse> getAll() {
-		return carService.findAll();
+	public List<CarDetailResponse> getAll(CarFilterRequest filter) {
+		return carService.findAll(filter);
 	}
 
 	@PostMapping		

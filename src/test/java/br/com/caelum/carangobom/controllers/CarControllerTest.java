@@ -2,6 +2,7 @@ package br.com.caelum.carangobom.controllers;
 
 import br.com.caelum.carangobom.dtos.BrandResponse;
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
+import br.com.caelum.carangobom.dtos.CarFilterRequest;
 import br.com.caelum.carangobom.dtos.CarRequest;
 import br.com.caelum.carangobom.exceptions.CarNotFoundException;
 import br.com.caelum.carangobom.services.CarService;
@@ -43,10 +44,10 @@ class CarControllerTest {
 				new CarDetailResponse(2L, new BrandResponse(2L,"Ford"),"Ka", 2011, BigDecimal.valueOf(10000L)),
 				new CarDetailResponse(3L, new BrandResponse(3L,"Fiat"), "Uno", 2000, BigDecimal.valueOf(5000L)));
 
-		when(carService.findAll())
+		when(carService.findAll(any()))
 			.thenReturn(carDetailsResponse);
 
-		List<CarDetailResponse> response = carController.getAll();
+		List<CarDetailResponse> response = carController.getAll(new CarFilterRequest());
 		
 		assertEquals(carDetailsResponse, response);
 	}

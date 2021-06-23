@@ -1,26 +1,35 @@
 package br.com.caelum.carangobom.services;
 
-import br.com.caelum.carangobom.domain.Brand;
-import br.com.caelum.carangobom.domain.Car;
-import br.com.caelum.carangobom.dtos.BrandResponse;
-import br.com.caelum.carangobom.dtos.CarDetailResponse;
-import br.com.caelum.carangobom.dtos.CarRequest;
-import br.com.caelum.carangobom.exceptions.CarNotFoundException;
-import br.com.caelum.carangobom.repositories.CarRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import br.com.caelum.carangobom.domain.Brand;
+import br.com.caelum.carangobom.domain.Car;
+import br.com.caelum.carangobom.dtos.BrandResponse;
+import br.com.caelum.carangobom.dtos.CarDetailResponse;
+import br.com.caelum.carangobom.dtos.CarFilterRequest;
+import br.com.caelum.carangobom.dtos.CarRequest;
+import br.com.caelum.carangobom.exceptions.CarNotFoundException;
+import br.com.caelum.carangobom.repositories.CarRepository;
+import br.com.caelum.carangobom.repositories.specifications.CarFilterSpecification;
 
 class CarServiceTest {
 
@@ -43,9 +52,10 @@ class CarServiceTest {
     		new Car(3L, new Brand(3L, "Fiat"), "Uno", 2000, BigDecimal.valueOf(5000L))
 		);
         
-        when(carRepositoryMock.findAll()).thenReturn(cars);
+        when(carRepositoryMock.findAll(any(CarFilterSpecification.class)))
+        	.thenReturn(cars);
         
-        List<CarDetailResponse> result = this.carService.findAll();
+        List<CarDetailResponse> result = this.carService.findAll(new CarFilterRequest());
         
         assertThat(result, hasSize(3));
         assertThat(result , contains(
@@ -79,7 +89,6 @@ class CarServiceTest {
 	void save_shouldCreate() {
 		CarRequest carRequest = new CarRequest(1l, "KA", 2011, BigDecimal.valueOf(10000L));
 		Car car = new Car(1l, new Brand(1l, "Ford"), "KA", 2011, BigDecimal.valueOf(10000L));
-		
 		
 		when(this.carRepositoryMock.save(any(Car.class)))
 			.thenReturn(car);

@@ -10,14 +10,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class CarControllerIT {
 
 	@Autowired
 	private MockMvc mockMVC;
-	
 
 	@Test
 	void whenCreate_ifNameIsEmpty_shouldValidate() throws Exception {

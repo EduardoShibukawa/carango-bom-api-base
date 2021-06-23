@@ -17,7 +17,6 @@ class BrandControllerIT {
 
 	@Autowired
 	private MockMvc mockMVC;
-	
 
 	@Test
 	void whenCreate_ifNameIsEmpty_shouldValidate() throws Exception {

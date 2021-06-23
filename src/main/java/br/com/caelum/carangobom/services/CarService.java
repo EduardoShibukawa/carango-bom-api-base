@@ -3,8 +3,11 @@ package br.com.caelum.carangobom.services;
 import br.com.caelum.carangobom.domain.Brand;
 import br.com.caelum.carangobom.domain.Car;
 import br.com.caelum.carangobom.dtos.CarDetailResponse;
+import br.com.caelum.carangobom.dtos.CarFilterRequest;
 import br.com.caelum.carangobom.dtos.CarRequest;
 import br.com.caelum.carangobom.repositories.CarRepository;
+import br.com.caelum.carangobom.repositories.specifications.CarFilterSpecification;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +24,11 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    public List<CarDetailResponse> findAll() {
-        return carRepository.findAll().stream().map(CarDetailResponse::fromModel)
+    public List<CarDetailResponse> findAll(CarFilterRequest filter) {
+        return carRepository
+        		.findAll(new CarFilterSpecification(filter))
+        		.stream()
+        		.map(CarDetailResponse::fromModel)
                 .collect(Collectors.toUnmodifiableList());
     }
 
