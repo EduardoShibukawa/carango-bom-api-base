@@ -72,8 +72,10 @@ class CarControllerTest {
 
 	@Test
 	void shouldDeleteCar() {
-		ResponseEntity<?> responseEntity = carController.delete(1L);
+		ResponseEntity<Void> responseEntity = carController.delete(1L);
+		
 		verify(carService).delete(1L);
+		
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	}
 
@@ -82,7 +84,8 @@ class CarControllerTest {
 		doThrow(CarNotFoundException.class)
 				.when(carService).delete(1L);
 
-		ResponseEntity<?> responseEntity = carController.delete(1L);
+		ResponseEntity<Void> responseEntity = carController.delete(1L);
+		
 		assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 	}
 

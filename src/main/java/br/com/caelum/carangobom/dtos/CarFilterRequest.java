@@ -12,9 +12,6 @@ public class CarFilterRequest {
 	
 	private BigDecimal maxValue;
 
-	public CarFilterRequest() {
-	}
-	
 	public String getModel() {
 		return model;
 	}

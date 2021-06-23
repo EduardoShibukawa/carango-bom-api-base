@@ -123,7 +123,8 @@ class BrandControllerTest {
 
 	@Test
 	void shoudlDeleteBrand() {
-		ResponseEntity<?> response = brandController.delete(1L);
+		ResponseEntity<Void> response = brandController.delete(1L);
+		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
 		verify(brandService).delete(1L);
@@ -135,7 +136,7 @@ class BrandControllerTest {
 			.when(brandService)
 			.delete(anyLong());
 
-		ResponseEntity<?> response = brandController.delete(1L);
+		ResponseEntity<Void> response = brandController.delete(1L);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 

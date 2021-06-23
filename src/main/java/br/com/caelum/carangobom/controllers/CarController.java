@@ -54,7 +54,7 @@ public class CarController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		try {
 			carService.delete(id);
 			return ResponseEntity.ok().build();

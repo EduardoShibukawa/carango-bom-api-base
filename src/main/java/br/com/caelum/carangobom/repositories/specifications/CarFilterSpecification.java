@@ -18,8 +18,8 @@ public class CarFilterSpecification implements Specification<Car> {
 
 	private static final long serialVersionUID = 7971569800945349613L;
 
-	private final CarFilterRequest filter;
-	private final List<Predicate> predicates;
+	private final transient CarFilterRequest filter;
+	private final transient List<Predicate> predicates;
 
 	public CarFilterSpecification(CarFilterRequest filter) {
 		this.filter = filter;
