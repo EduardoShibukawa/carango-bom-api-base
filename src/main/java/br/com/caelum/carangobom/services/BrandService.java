@@ -1,15 +1,14 @@
 package br.com.caelum.carangobom.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import br.com.caelum.carangobom.domain.Brand;
 import br.com.caelum.carangobom.dtos.BrandRequest;
 import br.com.caelum.carangobom.dtos.BrandResponse;
+import br.com.caelum.carangobom.repositories.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.caelum.carangobom.domain.Brand;
-import br.com.caelum.carangobom.repositories.BrandRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BrandService {
@@ -40,7 +39,7 @@ public class BrandService {
 		return brandRepository
 				.findAllByOrderByName()
 				.stream()
-				.map((b) -> new BrandResponse(b.getId(), b.getName()))
+				.map(b -> new BrandResponse(b.getId(), b.getName()))
 				.collect(Collectors.toUnmodifiableList());
 	}
 
