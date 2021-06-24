@@ -69,7 +69,7 @@ class CarFilterSpecificationTest {
 	@Test
 	void whenFilterSpecificationShouldFilter() {
 		carFilterRequest.setModel("KA");
-		carFilterRequest.setIdBrand(1l);
+		carFilterRequest.setIdBrand(1L);
 		carFilterRequest.setMinValue(BigDecimal.ONE);
 		carFilterRequest.setMaxValue(BigDecimal.TEN);
 		
@@ -84,7 +84,7 @@ class CarFilterSpecificationTest {
 		
 		verify(criteriaBuilderMock).and(any());
 		verify(criteriaBuilderMock).like(any(), eq("%KA%"));
-		verify(criteriaBuilderMock).equal(any(), eq(1l));
+		verify(criteriaBuilderMock).equal(any(), eq(1L));
 		verify(criteriaBuilderMock).greaterThanOrEqualTo(any(), eq(BigDecimal.ONE));
 		verify(criteriaBuilderMock).lessThanOrEqualTo(any(), eq(BigDecimal.TEN));
 	}

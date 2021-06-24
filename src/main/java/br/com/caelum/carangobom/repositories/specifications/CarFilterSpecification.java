@@ -36,6 +36,10 @@ public class CarFilterSpecification implements Specification<Car> {
 		filterValues(root, criteriaBuilder);
 	
 		
+		return filters(criteriaBuilder);
+	}
+
+	private Predicate filters(CriteriaBuilder criteriaBuilder) {
 		return criteriaBuilder
 			.and(predicates.toArray(new Predicate[predicates.size()]));
 	}

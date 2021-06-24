@@ -120,11 +120,14 @@ class BrandServiceTest {
 
     @Test
     void whenUpdate_notFoundBrand_shouldThrowBrandNotFoundException() {
+    	final BrandRequest brandRequest = new BrandRequest("Audi");
         doThrow(BrandNotFoundException.class)
                 .when(brandRepository)
                 .findBrand(1L);
 
-        assertThrows(BrandNotFoundException.class, () -> brandService.update(1L, new BrandRequest("Audi")));
+        assertThrows(BrandNotFoundException.class, () -> {
+			brandService.update(1L, brandRequest);
+		});
     }
 
     @Test
