@@ -20,23 +20,14 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<OutputParameterErrorDto> paramExceptionList = new ArrayList<>();
-        OutPutParameterListErrorDto exceptionList = new OutPutParameterListErrorDto();
-        
-        ex.getBindingResult()
-        	.getFieldErrors()
-        	.forEach(e -> {
-	            OutputParameterErrorDto d = new OutputParameterErrorDto();
-	            
-	            d.setParameter(e.getField());
-	            d.setMessage(e.getDefaultMessage());
-	            
-	            paramExceptionList.add(d);
-	        });
-        
-        
-        exceptionList.setErrors(paramExceptionList);
-        
-        return handleExceptionInternal(ex, exceptionList, headers, status, request);
+		List<OutputParameterErrorDto> paramExceptionList = new ArrayList<>();
+
+		ex.getBindingResult()
+			.getFieldErrors()
+			.forEach(e -> paramExceptionList.add(new OutputParameterErrorDto(e.getField(), e.getDefaultMessage())));
+
+		OutPutParameterListErrorDto exceptionList = new OutPutParameterListErrorDto(paramExceptionList);
+
+		return handleExceptionInternal(ex, exceptionList, headers, status, request);
 	}
 }

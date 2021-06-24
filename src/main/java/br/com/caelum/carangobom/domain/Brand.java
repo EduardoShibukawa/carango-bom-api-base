@@ -6,7 +6,18 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 
 @Entity
 public class Brand {
@@ -18,34 +29,11 @@ public class Brand {
     @Size(min = 2, message = "Deve ter {min} ou mais caracteres.")
     private String name;
 
-    public Brand() {}
-
     public Brand(Long id) {
     	this.id = id;
     }
     
     public Brand(String name) {
-        this(null, name);
-    }
-
-    public Brand(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    	this.name = name;
     }
 }

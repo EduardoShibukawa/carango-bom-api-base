@@ -34,7 +34,6 @@ public class CarFilterSpecification implements Specification<Car> {
 		filterBrand(root, criteriaBuilder);
 		
 		filterValues(root, criteriaBuilder);
-	
 		
 		return filters(criteriaBuilder);
 	}
@@ -55,15 +54,13 @@ public class CarFilterSpecification implements Specification<Car> {
 	}
 
 	private void filterBrand(Root<Car> root, CriteriaBuilder criteriaBuilder) {
-		if (!Objects.isNull(filter.getIdBrand())
-				&& filter.getIdBrand() > 0L) {
+		if (filter.getIdBrand() > 0L) {
 			predicates.add(criteriaBuilder.equal(root.get("brand").get("id"), filter.getIdBrand()));		
 		}
 	}
 
 	private void filterModel(Root<Car> root, CriteriaBuilder criteriaBuilder) {
-		if (!Objects.isNull(filter.getModel())
-				&& !filter.getModel().isBlank()) {
+		if (!filter.getModel().isBlank()) {
 			predicates.add(criteriaBuilder.like(root.get("model"), "%" + filter.getModel() + "%"));		
 		}
 	}

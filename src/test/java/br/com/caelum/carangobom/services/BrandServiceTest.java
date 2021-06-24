@@ -75,7 +75,7 @@ class BrandServiceTest {
 
     @Test
     void delete_success() {
-        Brand brand = new Brand("Audi");
+        Brand brand = new Brand(1L, "Audi");
 
         when(brandRepository.findBrand(1L)).thenReturn(brand);
 
@@ -133,7 +133,7 @@ class BrandServiceTest {
     @Test
     void whenUpdate_foundBrand_shouldUpdate() {
         BrandRequest brandRequest = new BrandRequest("New Audi");
-        Brand brand = new Brand("Audi");
+        Brand brand = new Brand(1L, "Audi");
         
         when(brandRepository.findBrand(1L))
         	.thenReturn(brand);

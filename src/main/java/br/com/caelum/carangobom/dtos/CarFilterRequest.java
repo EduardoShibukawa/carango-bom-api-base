@@ -2,45 +2,26 @@ package br.com.caelum.carangobom.dtos;
 
 import java.math.BigDecimal;
 
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+
+@Value
+@RequiredArgsConstructor
 public class CarFilterRequest {
 
-	private String model;
+	String model;
 	
-	private Long idBrand;
+	Long idBrand;
 	
-	private BigDecimal minValue;
+	BigDecimal minValue;
 	
-	private BigDecimal maxValue;
-
-	public String getModel() {
-		return model;
-	}
-
-	public void setModel(String model) {
-		this.model = model;
-	}
-
-	public Long getIdBrand() {
-		return idBrand;
+	BigDecimal maxValue;
+	
+	public CarFilterRequest() {
+		this.model = "";
+		this.idBrand = 0L;
+		this.minValue = null;
+		this.maxValue = null;
 	}
 	
-	public void setIdBrand(Long idBrand) {
-		this.idBrand = idBrand;
-	}
-
-	public BigDecimal getMinValue() {
-		return minValue;
-	}
-
-	public void setMinValue(BigDecimal minValue) {
-		this.minValue = minValue;
-	}
-
-	public BigDecimal getMaxValue() {
-		return maxValue;
-	}
-
-	public void setMaxValue(BigDecimal maxValue) {
-		this.maxValue = maxValue;
-	}
 }

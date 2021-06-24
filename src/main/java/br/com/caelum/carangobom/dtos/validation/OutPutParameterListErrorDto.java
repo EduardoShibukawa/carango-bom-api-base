@@ -2,19 +2,14 @@ package br.com.caelum.carangobom.dtos.validation;
 
 import java.util.List;
 
+import lombok.Value;
+
+@Value
 public class OutPutParameterListErrorDto {
 
-    private List<OutputParameterErrorDto> errors;
+	List<OutputParameterErrorDto> errors;
 
-    public int getErroCount() {
-        return errors.size();
-    }
-
-    public List<OutputParameterErrorDto> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<OutputParameterErrorDto> erros) {
-        this.errors = erros;
-    }
+	public int getErroCount() {
+		return errors.size();
+	}
 }

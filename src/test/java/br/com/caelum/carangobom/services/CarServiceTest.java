@@ -129,8 +129,8 @@ class CarServiceTest {
 	void shouldUpdate() {
 		CarRequest request = new CarRequest(1L, "New Ka", 2012, BigDecimal.valueOf(15000.00));
 
-		Car carToUpdate = new Car(new Brand("Ford"), "Ka",2011,BigDecimal.valueOf(10000.00));
-		Car carUpdated = new Car(new Brand("Ford"), "NewKa",2012,BigDecimal.valueOf(15000.00));
+		Car carToUpdate = new Car(new Brand(1L, "Ford"), "Ka",2011,BigDecimal.valueOf(10000.00));
+		Car carUpdated = new Car(new Brand(1L, "Ford"), "NewKa",2012,BigDecimal.valueOf(15000.00));
 
 		when(carRepositoryMock.findCar(1L))
 				.thenReturn(carToUpdate);
