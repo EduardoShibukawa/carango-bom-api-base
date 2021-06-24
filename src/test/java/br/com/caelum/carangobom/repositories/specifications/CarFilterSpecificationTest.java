@@ -54,6 +54,32 @@ class CarFilterSpecificationTest {
 	}
 	
 	@Test
+	void whenFilterBlankModelThenSpecificationShouldBeEmpty() {
+		carFilterRequest.setModel(" ");
+
+		CarFilterSpecification specification = new CarFilterSpecification(carFilterRequest);
+		
+		specification.toPredicate(rootMock, queryMock, criteriaBuilderMock);
+		
+		verify(criteriaBuilderMock)
+			
+		.and(new ArrayList<Predicate>().toArray(new Predicate[0]));
+	}
+	
+	@Test
+	void whenFilterIdBrandModelIsZeroThenSpecificationShouldBeEmpty() {
+		carFilterRequest.setIdBrand(0L);
+
+		CarFilterSpecification specification = new CarFilterSpecification(carFilterRequest);
+		
+		specification.toPredicate(rootMock, queryMock, criteriaBuilderMock);
+		
+		verify(criteriaBuilderMock)
+			
+		.and(new ArrayList<Predicate>().toArray(new Predicate[0]));
+	}	
+	
+	@Test
 	void whenFilterOnlyNameSpecificationShouldFilterOnlyName() {
 		carFilterRequest.setModel("KA");
 		

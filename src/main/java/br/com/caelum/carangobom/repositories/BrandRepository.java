@@ -3,13 +3,13 @@ package br.com.caelum.carangobom.repositories;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
 import br.com.caelum.carangobom.domain.Brand;
 import br.com.caelum.carangobom.exceptions.BrandNotFoundException;
 
 
-public interface BrandRepository extends JpaRepository<Brand, Long> {
+public interface BrandRepository extends Repository<Brand, Long> {
 
     void delete(Brand brand);
     

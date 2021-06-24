@@ -1,9 +1,12 @@
 package br.com.caelum.carangobom.repositories;
 
-import br.com.caelum.carangobom.domain.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    boolean existsByUserName(String userName);
-    User save(User user);
+import br.com.caelum.carangobom.domain.User;
+
+public interface UserRepository extends Repository<User, Long> {
+	
+	User save(User user);
+    
+	boolean existsByUserName(String userName);
 }

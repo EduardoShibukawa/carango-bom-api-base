@@ -1,4 +1,4 @@
-package br.com.caelum.carangobom.validation;
+package br.com.caelum.carangobom.dtos.validation;
 
 import java.util.List;
 
