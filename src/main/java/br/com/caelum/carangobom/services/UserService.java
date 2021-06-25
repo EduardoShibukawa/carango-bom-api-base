@@ -16,7 +16,7 @@ public class UserService {
     }
 
     public UserDetailResponse save(UserRequest userRequest) {
-        if (userRepository.existsByUserName(userRequest.getUserName()))
+        if (userRepository.existsByUsername(userRequest.getUsername()))
             throw new UserAlreadyExistException();
 
         return UserDetailResponse.fromModel(userRepository.save(userRequest.toModel()));

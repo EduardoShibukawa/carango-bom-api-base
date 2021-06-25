@@ -33,7 +33,7 @@ class UserServiceTest {
 		UserRequest userRequest = new UserRequest("lucas", "123456");
 		User user = new User(1L, "lucas", "123456");
 
-		when(userRepositoryMock.existsByUserName("lucas"))
+		when(userRepositoryMock.existsByUsername("lucas"))
 				.thenReturn(false);
 
 		when(userRepositoryMock.save(any()))
@@ -41,7 +41,7 @@ class UserServiceTest {
 
 		UserDetailResponse userDetailResponse = userService.save(userRequest);
 
-		assertEquals(userRequest.getUserName(), userDetailResponse.getUserName());
+		assertEquals(userRequest.getUsername(), userDetailResponse.getUsername());
 		assertEquals(1L, userDetailResponse.getId());
 	}
 
@@ -49,7 +49,7 @@ class UserServiceTest {
 	void whenCreateANewUserAndUserAlreadyExist_shouldReturnUserDetails() {
 		UserRequest userRequest = new UserRequest("lucas", "123456");
 
-		when(userRepositoryMock.existsByUserName("lucas"))
+		when(userRepositoryMock.existsByUsername("lucas"))
 				.thenReturn(true);
 
 		assertThrows(UserAlreadyExistException.class, () -> userService.save(userRequest));

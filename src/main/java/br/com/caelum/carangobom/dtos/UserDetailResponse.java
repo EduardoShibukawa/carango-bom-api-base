@@ -8,9 +8,9 @@ public class UserDetailResponse {
     
 	Long id;
 	
-    String userName;
+    String username;
 
     public static UserDetailResponse fromModel(User user) {
-        return new UserDetailResponse(user.getId(), user.getUserName());
+        return new UserDetailResponse(user.getId(), user.getUsername());
     }
 }
