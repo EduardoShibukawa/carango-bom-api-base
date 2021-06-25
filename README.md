@@ -1,6 +1,6 @@
 # carango-bom-api-base
 
-## Requitos
+## Requisitos
 
 Eclipse:
 - https://projectlombok.org/setup/eclipse
