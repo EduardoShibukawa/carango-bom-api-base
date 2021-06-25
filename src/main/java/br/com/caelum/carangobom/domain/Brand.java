@@ -28,7 +28,7 @@ public class Brand {
     @NotBlank
     @Size(min = 2, message = "Deve ter {min} ou mais caracteres.")
     private String name;
-
+    
     public Brand(Long id) {
     	this.id = id;
     }
