@@ -9,6 +9,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -23,6 +25,7 @@ import br.com.caelum.carangobom.domain.User;
 import br.com.caelum.carangobom.dtos.UserDetailResponse;
 import br.com.caelum.carangobom.dtos.UserRequest;
 import br.com.caelum.carangobom.exceptions.UserAlreadyExistException;
+import br.com.caelum.carangobom.exceptions.UserNotFoundException;
 import br.com.caelum.carangobom.repositories.UserRepository;
 
 class UserServiceTest {
@@ -92,7 +95,6 @@ class UserServiceTest {
 	
 	@Test
 	void should_delete() {
-		
 		when(userRepositoryMock.findUser(1l))
 			.thenReturn(new User());
 		
@@ -103,5 +105,12 @@ class UserServiceTest {
 	
 	@Test
 	void whenDeleteAndUserNotExists_shouldThrowUserNotFoundException() {
+		doThrow(UserNotFoundException.class)
+			.when(userRepositoryMock)
+			.findUser(1L);
+		
+		assertThrows(UserNotFoundException.class, () -> userService.delete(1L));
+		
+		verify(userRepositoryMock, never()).delete(any());
 	}
 }
