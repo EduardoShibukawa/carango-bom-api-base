@@ -1,19 +1,28 @@
 package br.com.caelum.carangobom.services;
 
-import br.com.caelum.carangobom.domain.User;
-import br.com.caelum.carangobom.dtos.UserDetailResponse;
-import br.com.caelum.carangobom.dtos.UserRequest;
-import br.com.caelum.carangobom.exceptions.UserAlreadyExistException;
-import br.com.caelum.carangobom.repositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import br.com.caelum.carangobom.domain.User;
+import br.com.caelum.carangobom.dtos.UserDetailResponse;
+import br.com.caelum.carangobom.dtos.UserRequest;
+import br.com.caelum.carangobom.exceptions.UserAlreadyExistException;
+import br.com.caelum.carangobom.repositories.UserRepository;
 
 class UserServiceTest {
 
@@ -26,6 +35,31 @@ class UserServiceTest {
 	public void setUp() {
         openMocks(this);
 		this.userService = new UserService(userRepositoryMock);
+	}
+
+	@Test
+	void findAll_shouldReturnUsersDetail() {
+		List<User> users = List.of(
+				new User(1L, "eduardo", "123456"),
+				new User(2L, "lucas", "654321"));
+		
+		when(userRepositoryMock.findAll())
+			.thenReturn(users);
+		
+		List<UserDetailResponse> result = userService.getAll();
+
+        assertThat(result, hasSize(2));
+        assertThat(result, contains(
+        		allOf(
+    				hasProperty("id", is(1L)), 
+    				hasProperty("username", is("eduardo"))
+						
+				),
+        		allOf(
+    				hasProperty("id", is(2L)), 
+    				hasProperty("username", is("lucas"))
+				)
+		));
 	}
 	
 	@Test

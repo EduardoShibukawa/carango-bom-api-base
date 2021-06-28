@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+import java.util.List;
+
 class UserControllerTest {
 
 	private UserController userController;
@@ -60,5 +62,22 @@ class UserControllerTest {
 		ResponseEntity<UserDetailResponse> responseEntity = userController.save(userRequest, uriBuilder);
 
 		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	void shouldReturnUsersWhenExists() {
+		List<UserDetailResponse> responses = List.of(
+				new UserDetailResponse(1l, "eduardo"),
+				new UserDetailResponse(2l, "lucas"));
+		
+		
+		when(userService.getAll())
+			.thenReturn(responses);
+		
+		ResponseEntity<List<UserDetailResponse>> result = userController.getAll();
+		
+		
+		assertEquals(HttpStatus.OK, result.getStatusCode());
+		assertEquals(responses, result.getBody());
 	}
 }
