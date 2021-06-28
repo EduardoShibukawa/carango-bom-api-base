@@ -25,7 +25,7 @@ public interface UserRepository extends Repository<User, Long> {
 	default User findUser(long id) {
 		Optional<User> user = findById(id);
 		
-		return user.orElseThrow(() -> new UserNotFoundException());
+		return user.orElseThrow(UserNotFoundException::new);
 	}
 	
 }
