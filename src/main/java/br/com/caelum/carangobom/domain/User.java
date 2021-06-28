@@ -23,7 +23,9 @@ import lombok.Setter;
 @Entity
 public class User implements UserDetails {
 
-    @Id
+    private static final long serialVersionUID = 1243324062728843095L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 

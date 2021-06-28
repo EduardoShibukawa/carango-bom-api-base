@@ -7,6 +7,7 @@ import org.springframework.data.repository.Repository;
 import br.com.caelum.carangobom.domain.User;
 
 public interface UserRepository extends Repository<User, Long> {
+	Optional<User> findById(Long id);
 	
 	User save(User user);
     
