@@ -32,4 +32,9 @@ public class UserService {
 				.map(UserDetailResponse::fromModel)
 				.collect(Collectors.toUnmodifiableList());
 	}
+
+	public void delete(long id) {
+		userRepository.delete(
+				userRepository.findUser(id));
+	}
 }

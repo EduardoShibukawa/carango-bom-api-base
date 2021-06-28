@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -87,5 +88,20 @@ class UserServiceTest {
 				.thenReturn(true);
 
 		assertThrows(UserAlreadyExistException.class, () -> userService.save(userRequest));
+	}
+	
+	@Test
+	void should_delete() {
+		
+		when(userRepositoryMock.findUser(1l))
+			.thenReturn(new User());
+		
+		userService.delete(1L);
+		
+		verify(userRepositoryMock).delete(any());
+	}
+	
+	@Test
+	void whenDeleteAndUserNotExists_shouldThrowUserNotFoundException() {
 	}
 }

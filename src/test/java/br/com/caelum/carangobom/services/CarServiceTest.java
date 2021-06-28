@@ -57,7 +57,7 @@ class CarServiceTest {
         
         List<CarDetailResponse> result = this.carService.findAll(new CarFilterRequest());
         
-        assertThat(result, hasSize(2));
+        assertThat(result, hasSize(3));
         assertThat(result , contains(
         		allOf(
     				hasProperty("id", is(1L)), 

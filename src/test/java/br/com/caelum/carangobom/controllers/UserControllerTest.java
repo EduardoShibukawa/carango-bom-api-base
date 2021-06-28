@@ -3,6 +3,7 @@ package br.com.caelum.carangobom.controllers;
 import br.com.caelum.carangobom.dtos.UserDetailResponse;
 import br.com.caelum.carangobom.dtos.UserRequest;
 import br.com.caelum.carangobom.exceptions.UserAlreadyExistException;
+import br.com.caelum.carangobom.exceptions.UserNotFoundException;
 import br.com.caelum.carangobom.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,5 +80,27 @@ class UserControllerTest {
 		
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertEquals(responses, result.getBody());
+	}
+	
+	@Test
+	void shouldDeleteUser() {
+		ResponseEntity<Void> result = userController.delete(1L);
+		
+		assertEquals(HttpStatus.OK, result.getStatusCode());
+		
+		verify(userService).delete(1l);
+	}
+	
+	@Test
+	void whenDeleteAndCarNotExist_shouldReturnStatusNotFound() {
+		doThrow(UserNotFoundException.class)
+			.when(userService)
+			.delete(1L);
+		
+		ResponseEntity<Void> result = userController.delete(1L);
+		
+		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+		
+		verify(userService).delete(1L);
 	}
 }

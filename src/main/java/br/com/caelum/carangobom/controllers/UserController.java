@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.caelum.carangobom.dtos.UserDetailResponse;
 import br.com.caelum.carangobom.dtos.UserRequest;
 import br.com.caelum.carangobom.exceptions.UserAlreadyExistException;
+import br.com.caelum.carangobom.exceptions.UserNotFoundException;
 import br.com.caelum.carangobom.services.UserService;
 
 @RestController
@@ -47,5 +49,16 @@ public class UserController {
     @GetMapping
 	public ResponseEntity<List<UserDetailResponse>> getAll() {
 		return ResponseEntity.ok(userService.getAll());
+	}
+
+    @DeleteMapping
+	public ResponseEntity<Void> delete(long id) {
+		try {
+			userService.delete(id);
+			
+			return ResponseEntity.ok().build();
+		} catch (UserNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }
