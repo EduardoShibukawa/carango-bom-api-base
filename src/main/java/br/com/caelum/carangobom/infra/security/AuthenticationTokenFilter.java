@@ -17,7 +17,7 @@ import br.com.caelum.carangobom.services.TokenService;
 
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
-	final private TokenService tokenService;
+	private final TokenService tokenService;
 
 	public AuthenticationTokenFilter(TokenService tokenService) {
 		this.tokenService = tokenService;
@@ -32,7 +32,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
 		if (valid) {
 			Optional<User> user = tokenService.getUser(token);
 
-			user.ifPresent((u) -> {
+			user.ifPresent(u -> {
 				UsernamePasswordAuthenticationToken authentication 
 					= new UsernamePasswordAuthenticationToken(u, null, u.getAuthorities());
 
@@ -52,6 +52,6 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
 			return null;
 		}
 
-		return authorization.get().replaceAll("Bearer ", "");
+		return authorization.get().replace("Bearer ", "");
 	}
 }
