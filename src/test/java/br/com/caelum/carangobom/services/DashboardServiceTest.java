@@ -49,7 +49,7 @@ class DashboardServiceTest {
 
 	
 	@Test
-	void findAll_shouldReturnUsersDetail() {
+	void findAll_shouldReturnCarByBrand() {
         List<Car> cars = List.of(
     		new Car(1L, new Brand(1L, "Audi"), "A3", 2016, BigDecimal.valueOf(150000L)),
     		new Car(3L, new Brand(3L, "Fiat"), "Uno", 2000, BigDecimal.valueOf(5000L)),
