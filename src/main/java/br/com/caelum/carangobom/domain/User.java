@@ -1,19 +1,17 @@
 package br.com.caelum.carangobom.domain;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
+@Table(name = "users")
 public class User implements UserDetails {
 
     private static final long serialVersionUID = 1243324062728843095L;
