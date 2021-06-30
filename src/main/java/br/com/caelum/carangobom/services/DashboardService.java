@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import br.com.caelum.carangobom.domain.Brand;
 import br.com.caelum.carangobom.domain.Car;
 import br.com.caelum.carangobom.dtos.CarPriceByBrandItemResponse;
 import br.com.caelum.carangobom.repositories.CarRepository;
 
+@Service
 public class DashboardService {
 
 	private final CarRepository carRepository;
