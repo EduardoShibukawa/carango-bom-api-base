@@ -3,6 +3,7 @@ package br.com.caelum.carangobom.domain;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
@@ -18,10 +19,10 @@ class UserTest {
 		assertEquals(1L, user.getId());
 		assertEquals("eduardo", user.getUsername());
 		assertEquals("123456", user.getPassword());
-		assertEquals(true, user.isAccountNonExpired());
-		assertEquals(true, user.isAccountNonLocked());
-		assertEquals(true, user.isCredentialsNonExpired());
-		assertEquals(true, user.isEnabled());
+		assertTrue(user.isAccountNonExpired());
+		assertTrue(user.isAccountNonLocked());
+		assertTrue(user.isCredentialsNonExpired());
+		assertTrue(user.isEnabled());
 		assertThat(user.getAuthorities(), hasSize(1));
 		assertThat(user.getAuthorities(), hasItem(authoritie(equalTo("admin"))));
 	}
