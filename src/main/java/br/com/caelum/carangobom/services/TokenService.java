@@ -17,16 +17,19 @@ import java.util.Optional;
 @Service
 public class TokenService {
 
-    @Value("${carango-bom-api.jwt.secret}")
-    private String secret;
+    private final String secret;
 
-    @Value("${carango-bom-api.jwt.expiration}")
-    private String expiration;
+    private final String expiration;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     
     @Autowired
-    public TokenService(UserRepository userRepository) {
+    public TokenService(
+    	    @Value("${carango-bom-api.jwt.secret}") String secret,
+    	    @Value("${carango-bom-api.jwt.expiration}") String expiration,
+    		UserRepository userRepository) {
+    	this.secret = secret;
+    	this.expiration = expiration;
 		this.userRepository = userRepository;
 	}
     
