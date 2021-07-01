@@ -6,11 +6,13 @@ import br.com.caelum.carangobom.dtos.BrandResponse;
 import br.com.caelum.carangobom.repositories.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class BrandService {
 
 	private final BrandRepository brandRepository;
@@ -20,6 +22,7 @@ public class BrandService {
 		this.brandRepository = brandRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public BrandResponse findById(Long id) {
 		return BrandResponse
 					.fromModel(brandRepository.findBrand(id));
@@ -35,6 +38,7 @@ public class BrandService {
 		brandRepository.delete(brandRepository.findBrand(id));
 	}
 
+	@Transactional(readOnly = true)
 	public List<BrandResponse> findAllByOrderByName() {
 		return brandRepository
 				.findAllByOrderByName()

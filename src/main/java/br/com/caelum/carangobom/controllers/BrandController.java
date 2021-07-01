@@ -28,7 +28,7 @@ import br.com.caelum.carangobom.services.BrandService;
 @RequestMapping("brands")
 public class BrandController {
 	
-    private  final BrandService brandService;
+    private final BrandService brandService;
     
     @Autowired
     public BrandController(BrandService brandService) {
