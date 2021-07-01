@@ -15,13 +15,13 @@ class UserTest {
 	void whenCreateUserShouldHaveDefaultAttributes() {
 		final User user = new User(1L, "eduardo", "123456");
 
-		assertEquals(user.getId(), 1L);
-		assertEquals(user.getUsername(), "eduardo");
-		assertEquals(user.getPassword(), "123456");
-		assertEquals(user.isAccountNonExpired(), true);
-		assertEquals(user.isAccountNonLocked(), true);
-		assertEquals(user.isCredentialsNonExpired(), true);
-		assertEquals(user.isEnabled(), true);
+		assertEquals(1L, user.getId());
+		assertEquals("eduardo", user.getUsername());
+		assertEquals("123456", user.getPassword());
+		assertEquals(true, user.isAccountNonExpired());
+		assertEquals(true, user.isAccountNonLocked());
+		assertEquals(true, user.isCredentialsNonExpired());
+		assertEquals(true, user.isEnabled());
 		assertThat(user.getAuthorities(), hasSize(1));
 		assertThat(user.getAuthorities(), hasItem(authoritie(equalTo("admin"))));
 	}
