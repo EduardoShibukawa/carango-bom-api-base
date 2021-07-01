@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import br.com.caelum.carangobom.dtos.CarPriceByBrandItemResponse;
 import br.com.caelum.carangobom.services.DashboardService;
 
-public class DashboardControllerTest {
+class DashboardControllerTest {
 	
 
 	private DashboardController dashboardController;
