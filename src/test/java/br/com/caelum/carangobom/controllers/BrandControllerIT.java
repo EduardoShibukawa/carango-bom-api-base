@@ -97,6 +97,17 @@ class BrandControllerIT {
 	}
 	
 	@Test
+	void whenFindById_andBrandNotExists_shouldThrowNotFound() throws Exception {
+		this.mockMVC
+			.perform(
+					MockMvcRequestBuilders
+						.get("/brands/4"))
+			.andExpect(status().is4xxClientError())
+			.andReturn()
+			.getResponse();
+	}
+	
+	@Test
 	@WithAnonymousUser
 	void whenFindAll_shouldNotAuthorize() throws Exception {
 		this.mockMVC
