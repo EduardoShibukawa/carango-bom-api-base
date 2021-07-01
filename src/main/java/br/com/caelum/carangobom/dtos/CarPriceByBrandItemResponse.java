@@ -8,7 +8,7 @@ import lombok.Value;
 public class CarPriceByBrandItemResponse {
 
 	String brand;
-	BigDecimal total;
+	BigDecimal totalPrice;
 	Long count;
 
 }
