@@ -12,8 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import br.com.caelum.carangobom.domain.User;
-import br.com.caelum.carangobom.services.TokenService;
+import br.com.caelum.carangobom.users.entities.User;
+import br.com.caelum.carangobom.auth.services.TokenService;
 
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 

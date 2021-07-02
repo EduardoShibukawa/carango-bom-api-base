@@ -15,8 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import br.com.caelum.carangobom.infra.security.AuthenticationTokenFilter;
-import br.com.caelum.carangobom.services.TokenService;
-import br.com.caelum.carangobom.services.UserAuthenticationService;
+import br.com.caelum.carangobom.auth.services.TokenService;
+import br.com.caelum.carangobom.auth.services.UserAuthenticationService;
 
 @EnableWebSecurity
 @Configuration

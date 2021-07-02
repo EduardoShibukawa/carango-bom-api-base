@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import br.com.caelum.carangobom.dtos.validation.OutPutParameterListErrorDto;
-import br.com.caelum.carangobom.dtos.validation.OutputParameterErrorDto;
+import br.com.caelum.carangobom.infra.validation.OutPutParameterListErrorDto;
+import br.com.caelum.carangobom.infra.validation.OutputParameterErrorDto;
 
 @ControllerAdvice
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
