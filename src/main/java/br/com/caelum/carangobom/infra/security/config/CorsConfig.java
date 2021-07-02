@@ -10,21 +10,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 	
-//	@Value("${carango-bom-api.cors.allowed.origin}") 
-	private String corsAllowedOrigin;
+	@Value("${carango-bom-api.cors.allowed.origin}") 
+	private List<String> corsAllowedOrigin;
 
-//	@Value("${carango-bom-api.cors.allowed.methods}") 
+	@Value("${carango-bom-api.cors.allowed.methods}") 
 	private List<String> corsAllowedMethods;
 	
-//	@Value("${carango-bom-api.cors.allow-credential}") 
+	@Value("${carango-bom-api.cors.allow-credential}") 
 	private boolean corsAllowCredentials;
 	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-	        .allowedOrigins("http://localhost:3000")
-	        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
-	        .allowCredentials(true);
+	        .allowedOrigins(this.corsAllowedOrigin.toArray(new String[0]))
+	        .allowedMethods(this.corsAllowedMethods.toArray(new String[0]))
+	        .allowCredentials(this.corsAllowCredentials);
 	}
-	
 }
