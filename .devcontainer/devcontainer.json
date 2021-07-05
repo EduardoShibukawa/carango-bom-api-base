@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/java
 {
 	"name": "Carango Bom API",
-	"dockerComposeFile": [ "../mysql/docker-compose.yaml", "./docker-compose.yaml" ],
+	"dockerComposeFile": [ "../devops/docker-compose.yaml", "./docker-compose.yaml" ],
 	"service": "api",
 	"runServices": [ "db" ],
 	"workspaceFolder": "/workspaces/carango-bom-api",
