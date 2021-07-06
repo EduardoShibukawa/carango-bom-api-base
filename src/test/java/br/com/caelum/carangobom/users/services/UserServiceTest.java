@@ -128,11 +128,13 @@ class UserServiceTest {
 
 	@Test
 	void whenUpdateAndUserNotExists_shouldThrowUserNotFoundException() {
+		UserRequest userRequest = new UserRequest("username", "password");
+
 		doThrow(UserNotFoundException.class)
 				.when(userRepositoryMock).findUser(1L);
 
 		assertThrows(UserNotFoundException.class,
-				() -> userService.update(1L, new UserRequest("username", "password")));
+				() -> userService.update(1L, userRequest));
 	}
 
 	@Test
