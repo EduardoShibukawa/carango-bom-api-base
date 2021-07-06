@@ -3,6 +3,7 @@ package br.com.caelum.carangobom.auth.controllers;
 import br.com.caelum.carangobom.auth.dtos.AuthRequest;
 import br.com.caelum.carangobom.auth.dtos.TokenResponse;
 import br.com.caelum.carangobom.auth.dtos.ValidTokenRequest;
+import br.com.caelum.carangobom.auth.dtos.ValidTokenResponse;
 import br.com.caelum.carangobom.auth.services.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -73,10 +74,10 @@ class AuthControllerTest {
 		when(tokenServiceMock.isTokenValid(any()))
 			.thenReturn(true);
 		
-		ResponseEntity<Void> response 
+		ResponseEntity<ValidTokenResponse> response
 			= authController.verify(new ValidTokenRequest("TOKEN"));
 		
-		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody().isValid());
 		
 		verify(tokenServiceMock).isTokenValid("TOKEN");
 	}
@@ -86,10 +87,10 @@ class AuthControllerTest {
 		when(tokenServiceMock.isTokenValid(any()))
 			.thenReturn(false);
 		
-		ResponseEntity<Void> response 
+		ResponseEntity<ValidTokenResponse> response
 			= authController.verify(new ValidTokenRequest("TOKEN"));
 		
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertFalse(response.getBody().isValid());
 		
 		verify(tokenServiceMock).isTokenValid("TOKEN");
 	}
