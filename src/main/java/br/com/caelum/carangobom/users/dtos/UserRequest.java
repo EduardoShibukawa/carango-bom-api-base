@@ -21,4 +21,13 @@ public class UserRequest {
     public User toModel(){
         return new User(this.username, new BCryptPasswordEncoder().encode(this.password));
     }
+
+
+    public User updateModel(User user){
+        user.setUsername(this.username);
+        user.setPassword(new BCryptPasswordEncoder().encode(this.password));
+        return user;
+    }
+
+
 }

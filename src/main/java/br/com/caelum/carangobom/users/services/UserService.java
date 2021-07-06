@@ -1,9 +1,10 @@
 package br.com.caelum.carangobom.users.services;
 
 import br.com.caelum.carangobom.users.dtos.UserDetailResponse;
-import br.com.caelum.carangobom.users.repositories.UserRepository;
 import br.com.caelum.carangobom.users.dtos.UserRequest;
+import br.com.caelum.carangobom.users.entities.User;
 import br.com.caelum.carangobom.users.exceptions.UserAlreadyExistException;
+import br.com.caelum.carangobom.users.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,16 @@ public class UserService {
             throw new UserAlreadyExistException();
 
         return UserDetailResponse.fromModel(userRepository.save(userRequest.toModel()));
+    }
+
+    public UserDetailResponse update(Long id, UserRequest userRequest) {
+        User user = userRepository.findUser(id);
+
+        if (!user.getUsername().equals(userRequest.getUsername())
+                && userRepository.existsByUsername(userRequest.getUsername()))
+            throw new UserAlreadyExistException();
+
+        return UserDetailResponse.fromModel(userRepository.save(userRequest.updateModel(user)));
     }
 
     @Transactional(readOnly = true)
