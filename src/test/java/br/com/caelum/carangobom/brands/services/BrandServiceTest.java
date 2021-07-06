@@ -3,6 +3,7 @@ package br.com.caelum.carangobom.brands.services;
 import br.com.caelum.carangobom.brands.dtos.BrandRequest;
 import br.com.caelum.carangobom.brands.dtos.BrandResponse;
 import br.com.caelum.carangobom.brands.entities.Brand;
+import br.com.caelum.carangobom.brands.exceptions.BrandAlreadyExistException;
 import br.com.caelum.carangobom.brands.exceptions.BrandNotFoundException;
 import br.com.caelum.carangobom.brands.repositories.BrandRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -64,6 +66,16 @@ class BrandServiceTest {
         brandService.save(brandRequest);
 
         verify(brandRepository).save(any());
+    }
+
+    @Test
+    void whenSaveAndBrandAlreadyExists_ShouldThrowBrandAlreadyExistsException(){
+        BrandRequest brandRequest = new BrandRequest("Audi");
+        Optional<Brand> optionalBrand = Optional.of(new Brand("A Brand"));
+
+        when(brandRepository.findByName(any())).thenReturn(optionalBrand);
+
+        assertThrows(BrandAlreadyExistException.class, () -> brandService.save(brandRequest));
     }
 
     @Test

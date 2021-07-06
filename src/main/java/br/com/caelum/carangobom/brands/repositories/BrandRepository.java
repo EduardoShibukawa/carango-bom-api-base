@@ -18,6 +18,8 @@ public interface BrandRepository extends Repository<Brand, Long> {
     
     List<Brand> findAllByOrderByName();
 
+    Optional<Brand> findByName(String name);
+
     default Brand findBrand(Long id){
         Optional<Brand> optional = findById(id);
 

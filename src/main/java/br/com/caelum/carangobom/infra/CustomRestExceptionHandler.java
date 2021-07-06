@@ -1,8 +1,7 @@
 package br.com.caelum.carangobom.infra;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.caelum.carangobom.infra.validation.OutPutParameterListErrorDto;
+import br.com.caelum.carangobom.infra.validation.OutputParameterErrorDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import br.com.caelum.carangobom.infra.validation.OutPutParameterListErrorDto;
-import br.com.caelum.carangobom.infra.validation.OutputParameterErrorDto;
+import java.util.ArrayList;
+import java.util.List;
 
 @ControllerAdvice
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {

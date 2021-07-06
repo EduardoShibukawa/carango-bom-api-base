@@ -2,6 +2,7 @@ package br.com.caelum.carangobom.brands.entities;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,6 +25,7 @@ public class Brand {
     private Long id;
 
     @NotBlank
+    @Column(unique = true)
     @Size(min = 2, message = "Deve ter {min} ou mais caracteres.")
     private String name;
     
