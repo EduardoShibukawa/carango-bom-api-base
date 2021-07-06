@@ -9,11 +9,14 @@ import br.com.caelum.carangobom.cars.repositories.CarRepository;
 import br.com.caelum.carangobom.cars.repositories.specification.CarFilterSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
+@Transactional
 public class CarService {
 
     private CarRepository carRepository;
@@ -23,6 +26,7 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+	@Transactional(readOnly = true)
     public List<CarDetailResponse> findAll(CarFilterRequest filter) {
         return carRepository
         		.findAll(new CarFilterSpecification(filter))
@@ -53,6 +57,7 @@ public class CarService {
         return CarDetailResponse.fromModel(carRepository.save(car));
     }
 
+	@Transactional(readOnly = true)
     public CarDetailResponse findById(long id) {
         return CarDetailResponse.fromModel(carRepository.findCar(id));
     }
