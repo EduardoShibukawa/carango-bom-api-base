@@ -103,4 +103,33 @@ class UserControllerTest {
 		
 		verify(userService).delete(1L);
 	}
+	
+	@Test
+	void shouldFindUseById() {
+		UserDetailResponse userDetailResponse
+			= new UserDetailResponse(1L, "eduardo");
+		
+		when(userService.findById(1L))
+		  .thenReturn(userDetailResponse);
+		
+		ResponseEntity<UserDetailResponse> result = userController.findById(1L);
+		
+		assertEquals(HttpStatus.OK, result.getStatusCode());
+		assertEquals(userDetailResponse, result.getBody());
+		
+		verify(userService).findById(1L);
+	}
+	
+	@Test
+	void whenFindByIdAndUserNotExist_shouldReturnStatusNotFound() {
+		doThrow(UserNotFoundException.class)
+			.when(userService)
+			.findById(1L);
+		
+		ResponseEntity<UserDetailResponse> result = userController.findById(1L);
+		
+		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+		
+		verify(userService).findById(1L);
+	}
 }

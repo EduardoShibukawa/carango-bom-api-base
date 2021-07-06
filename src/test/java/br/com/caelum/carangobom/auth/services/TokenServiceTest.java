@@ -1,24 +1,26 @@
 package br.com.caelum.carangobom.auth.services;
 
-import br.com.caelum.carangobom.users.entities.User;
-import br.com.caelum.carangobom.users.repositories.UserRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Clock;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.TimeZone;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
+import br.com.caelum.carangobom.users.entities.User;
+import br.com.caelum.carangobom.users.repositories.UserRepository;
 
 class TokenServiceTest {
 
@@ -63,9 +65,6 @@ class TokenServiceTest {
 		assertNotNull(token);
 		assertTrue(this.tokenService.isTokenValid(token));
 	}
-
-	private static Clock CLOCK = Clock.systemDefaultZone();
-	private static final TimeZone REAL_TIME_ZONE = TimeZone.getDefault();
 
 	@Test
 	void shouldGetUser() {

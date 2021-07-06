@@ -31,15 +31,12 @@ public class TokenService {
 			@Value("${carango-bom-api.jwt.secret}") String secret,
 			@Value("${carango-bom-api.jwt.expiration}") String expiration,
 			UserRepository userRepository) {
-		this.secret = secret;
-		this.expiration = expiration;
-		this.userRepository = userRepository;
-		this.clock = DefaultClock.INSTANCE;
+		this(secret, expiration, userRepository, DefaultClock.INSTANCE);
 	}
 
 	public TokenService(
-			@Value("${carango-bom-api.jwt.secret}") String secret,
-			@Value("${carango-bom-api.jwt.expiration}") String expiration,
+			String secret,
+			String expiration,
 			UserRepository userRepository,
 			Clock clock) {
 		this.secret = secret;

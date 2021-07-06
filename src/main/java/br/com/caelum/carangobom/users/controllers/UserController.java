@@ -60,8 +60,6 @@ public class UserController {
 			return ResponseEntity.notFound().build();
 		}
     }
-    
-    
 
     @DeleteMapping
 	public ResponseEntity<Void> delete(long id) {

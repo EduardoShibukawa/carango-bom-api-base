@@ -1,8 +1,8 @@
 package br.com.caelum.carangobom.auth.dtos;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class ValidTokenRequest {
 	String token;
 }
