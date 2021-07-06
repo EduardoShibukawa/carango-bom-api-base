@@ -132,4 +132,33 @@ class UserControllerTest {
 		
 		verify(userService).findById(1L);
 	}
+
+	@Test
+	void whenUpdateAndUsernameAlreadyExist_shouldReturnConflict(){
+		UserRequest userRequest = new UserRequest("newusername", "newpassword");
+
+		doThrow(UserAlreadyExistException.class).when(userService).update(1L, userRequest);
+
+		ResponseEntity<UserDetailResponse> response = userController.update(1L, userRequest);
+		assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+	}
+
+	@Test
+	void whenUpdateAndUserNotExists_shouldReturnNotFound(){
+		UserRequest userRequest = new UserRequest("newusername", "newpassword");
+
+		doThrow(UserNotFoundException.class).when(userService).update(1L, userRequest);
+		ResponseEntity<UserDetailResponse> response = userController.update(1L, userRequest);
+
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+	}
+
+	@Test
+	void whenUpdate_shouldReturnOk(){
+		UserRequest userRequest = new UserRequest("newusername", "newpassword");
+
+		ResponseEntity<UserDetailResponse> response = userController.update(1L, userRequest);
+
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
 }

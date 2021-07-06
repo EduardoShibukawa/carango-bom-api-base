@@ -15,8 +15,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -125,5 +124,57 @@ class UserServiceTest {
 			.findUser(1L);
 		
 		assertThrows(UserNotFoundException.class, () -> userService.findById(1L));
+	}
+
+	@Test
+	void whenUpdateAndUserNotExists_shouldThrowUserNotFoundException() {
+		doThrow(UserNotFoundException.class)
+				.when(userRepositoryMock).findUser(1L);
+
+		assertThrows(UserNotFoundException.class,
+				() -> userService.update(1L, new UserRequest("username", "password")));
+	}
+
+	@Test
+	void whenUpdateAndUseSameUsernameOfAnotherUser_shouldThrowUserAlreadyExistException() {
+		UserRequest userRequest = new UserRequest("newusername", "password");
+		User user = new User("username", "password");
+
+		when(userRepositoryMock.findUser(1L)).thenReturn(user);
+		when(userRepositoryMock.existsByUsername(userRequest.getUsername())).thenReturn(true);
+
+		assertThrows(UserAlreadyExistException.class, () -> userService.update(1L, userRequest));
+	}
+
+	@Test
+	void whenUpdateAndUserExistAndPutSameUsername_shouldReturnUserResponse() {
+		UserRequest userRequest = new UserRequest("username", "newpassword");
+		User user = new User(1L,"username", "password");
+
+		when(userRepositoryMock.findUser(1L)).thenReturn(user);
+		when(userRepositoryMock.existsByUsername(userRequest.getUsername())).thenReturn(true);
+		when(userRepositoryMock.save(user)).thenReturn(user);
+
+		UserDetailResponse response = userService.update(1L, userRequest);
+		assertEquals(userRequest.getUsername(), response.getUsername());
+		assertEquals(1L, response.getId());
+
+		verify(userRepositoryMock).save(user);
+	}
+
+	@Test
+	void whenUpdateAndPutDifferentUsername_shouldReturnUserResponse() {
+		UserRequest userRequest = new UserRequest("new username", "newpassword");
+		User user = new User(1L,"username", "password");
+
+		when(userRepositoryMock.findUser(1L)).thenReturn(user);
+		when(userRepositoryMock.existsByUsername(userRequest.getUsername())).thenReturn(false);
+		when(userRepositoryMock.save(user)).thenReturn(user);
+
+		UserDetailResponse response = userService.update(1L, userRequest);
+
+		assertEquals(1L, response.getId());
+
+		verify(userRepositoryMock).save(user);
 	}
 }
