@@ -2,6 +2,7 @@ package br.com.caelum.carangobom.auth.controllers;
 
 import br.com.caelum.carangobom.auth.dtos.AuthRequest;
 import br.com.caelum.carangobom.auth.dtos.TokenResponse;
+import br.com.caelum.carangobom.auth.dtos.ValidTokenRequest;
 import br.com.caelum.carangobom.auth.services.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,13 +60,38 @@ class AuthControllerTest {
 		
 		doThrow(BadCredentialsException.class)
 			.when(authenticationManagerMock)
-			.authenticate(any());
-		
+			.authenticate(any());		
 		
 		ResponseEntity<TokenResponse> response 
 			= authController.auth(authRequest);
 		
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+	}
+		
+	@Test
+	void whenVerifyAndValid_shouldReturnOk() {
+		when(tokenServiceMock.isTokenValid(any()))
+			.thenReturn(true);
+		
+		ResponseEntity<Void> response 
+			= authController.verify(new ValidTokenRequest("TOKEN"));
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(tokenServiceMock).isTokenValid("TOKEN");
+	}
+
+	@Test
+	void whenVerifyAndNotValid_shouldReturnBadRequest() {
+		when(tokenServiceMock.isTokenValid(any()))
+			.thenReturn(false);
+		
+		ResponseEntity<Void> response 
+			= authController.verify(new ValidTokenRequest("TOKEN"));
+		
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		
+		verify(tokenServiceMock).isTokenValid("TOKEN");
 	}
 
 }

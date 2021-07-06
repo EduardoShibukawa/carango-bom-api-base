@@ -106,4 +106,24 @@ class UserServiceTest {
 		
 		verify(userRepositoryMock, never()).delete(any());
 	}
+	
+	@Test
+	void shouldFindById() {
+		when(userRepositoryMock.findUser(1L))
+			.thenReturn(new User(1L, "eduardo", "123456"));
+		
+		UserDetailResponse findById = userService.findById(1L);
+		
+		assertEquals(1L, findById.getId());
+		assertEquals("eduardo", findById.getUsername());
+	}
+	
+	@Test
+	void whenUserNotFound_shouldThrowError() {
+		doThrow(UserNotFoundException.class)
+			.when(userRepositoryMock)
+			.findUser(1L);
+		
+		assertThrows(UserNotFoundException.class, () -> userService.findById(1L));
+	}
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.caelum.carangobom.auth.dtos.AuthRequest;
 import br.com.caelum.carangobom.auth.dtos.TokenResponse;
+import br.com.caelum.carangobom.auth.dtos.ValidTokenRequest;
 import br.com.caelum.carangobom.auth.services.TokenService;
 
 @RestController
@@ -37,6 +38,15 @@ public class AuthController {
         }catch (AuthenticationException e){
             return ResponseEntity.badRequest().build();
         }
-
     }
+    
+    @PostMapping("/verify")
+    public ResponseEntity<Void> verify(@Valid @RequestBody ValidTokenRequest request) {
+    	if (tokenService.isTokenValid(request.getToken())) {
+    		return ResponseEntity.ok().build();
+    	}
+    	
+    	return ResponseEntity.badRequest().build();
+    }
+    
 }
