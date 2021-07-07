@@ -4,7 +4,9 @@ import br.com.caelum.carangobom.brands.dtos.BrandRequest;
 import br.com.caelum.carangobom.brands.dtos.BrandResponse;
 import br.com.caelum.carangobom.brands.entities.Brand;
 import br.com.caelum.carangobom.brands.exceptions.BrandAlreadyExistException;
+import br.com.caelum.carangobom.brands.exceptions.BrandWithCarException;
 import br.com.caelum.carangobom.brands.repositories.BrandRepository;
+import br.com.caelum.carangobom.cars.repositories.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +20,12 @@ import java.util.stream.Collectors;
 public class BrandService {
 
 	private final BrandRepository brandRepository;
+	private final CarRepository carRepository;
 
 	@Autowired
-	public BrandService(BrandRepository brandRepository) {
+	public BrandService(BrandRepository brandRepository, CarRepository carRepository) {
 		this.brandRepository = brandRepository;
+		this.carRepository = carRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -43,6 +47,10 @@ public class BrandService {
 	}
 
 	public void delete(Long id) {
+
+		if (carRepository.existsByBrand_Id(id)){
+			throw new BrandWithCarException();
+		}
 		brandRepository.delete(brandRepository.findBrand(id));
 	}
 

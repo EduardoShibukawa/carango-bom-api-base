@@ -6,6 +6,7 @@ import br.com.caelum.carangobom.brands.entities.Brand;
 import br.com.caelum.carangobom.brands.exceptions.BrandAlreadyExistException;
 import br.com.caelum.carangobom.brands.exceptions.BrandNotFoundException;
 import br.com.caelum.carangobom.brands.repositories.BrandRepository;
+import br.com.caelum.carangobom.cars.repositories.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,11 +28,13 @@ class BrandServiceTest {
     private BrandService brandService;
     @Mock
     private BrandRepository brandRepository;
+    @Mock
+    private CarRepository carRepository;
 
     @BeforeEach
     public void configureMock() {
         openMocks(this);
-        brandService = new BrandService(brandRepository);
+        brandService = new BrandService(brandRepository, carRepository);
     }
 
     @Test

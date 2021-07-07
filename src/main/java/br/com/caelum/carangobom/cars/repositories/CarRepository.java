@@ -21,6 +21,8 @@ public interface CarRepository extends Repository<Car, Long>, JpaSpecificationEx
 	
 	List<Car> findAll(Specification<Car> spec);
 
+	boolean existsByBrand_Id(Long id);
+
 	default Car findCar(Long id){
 		Optional<Car> optional = findById(id);
 

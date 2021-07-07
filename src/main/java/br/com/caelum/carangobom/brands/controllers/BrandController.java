@@ -3,10 +3,14 @@ package br.com.caelum.carangobom.brands.controllers;
 import br.com.caelum.carangobom.brands.dtos.BrandRequest;
 import br.com.caelum.carangobom.brands.dtos.BrandResponse;
 import br.com.caelum.carangobom.brands.exceptions.BrandNotFoundException;
+import br.com.caelum.carangobom.brands.exceptions.BrandWithCarException;
 import br.com.caelum.carangobom.brands.services.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -76,6 +80,12 @@ public class BrandController {
             
             return ResponseEntity.ok().build();
     	}
+    	catch (BrandWithCarException e){
+            HttpHeaders header = new HttpHeaders();
+            header.setContentType(MediaType.TEXT_PLAIN);
+            header.set("message", e.getMessage());
+    	    return ResponseEntity.status(HttpStatus.CONFLICT).headers(header).build();
+        }
     	catch (BrandNotFoundException e) {
     		return ResponseEntity.notFound().build();
 		}
