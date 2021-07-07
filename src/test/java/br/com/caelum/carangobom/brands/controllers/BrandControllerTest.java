@@ -4,6 +4,7 @@ import br.com.caelum.carangobom.brands.dtos.BrandRequest;
 import br.com.caelum.carangobom.brands.dtos.BrandResponse;
 import br.com.caelum.carangobom.brands.entities.Brand;
 import br.com.caelum.carangobom.brands.exceptions.BrandNotFoundException;
+import br.com.caelum.carangobom.brands.exceptions.BrandWithCarException;
 import br.com.caelum.carangobom.brands.services.BrandService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -135,6 +136,19 @@ class BrandControllerTest {
 		ResponseEntity<Void> response = brandController.delete(1L);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+		verify(brandService, times(1)).delete(any());
+	}
+
+	@Test
+	void shouldReturnConflictIfBrandHasCarAssociated_delete() {
+		doThrow(BrandWithCarException.class)
+			.when(brandService)
+			.delete(anyLong());
+
+		ResponseEntity<Void> response = brandController.delete(1L);
+
+		assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
 		verify(brandService, times(1)).delete(any());
 	}

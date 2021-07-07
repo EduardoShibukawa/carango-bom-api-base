@@ -5,6 +5,7 @@ import br.com.caelum.carangobom.brands.dtos.BrandResponse;
 import br.com.caelum.carangobom.brands.entities.Brand;
 import br.com.caelum.carangobom.brands.exceptions.BrandAlreadyExistException;
 import br.com.caelum.carangobom.brands.exceptions.BrandNotFoundException;
+import br.com.caelum.carangobom.brands.exceptions.BrandWithCarException;
 import br.com.caelum.carangobom.brands.repositories.BrandRepository;
 import br.com.caelum.carangobom.cars.repositories.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -151,5 +152,12 @@ class BrandServiceTest {
         brandService.update(1L, brandRequest);
 
         verify(brandRepository).save(brand);
+    }
+
+    @Test
+    void whenDeleteAndHaveCarAssociated_shouldThrowBrandWithCarException(){
+        when(carRepository.existsByBrand_Id(1L)).thenReturn(true);
+
+        assertThrows(BrandWithCarException.class, () -> brandService.delete(1L));
     }
 }
